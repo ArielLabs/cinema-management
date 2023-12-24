@@ -12,13 +12,10 @@ export const insertMembers = async () => {
     };
   });
 
-  return await memberModel.insertMany(members);
+  await memberModel.insertMany(members);
 };
 
 export const hasMembers = async () => {
   const countMembers = await memberModel.countDocuments({});
-  if (countMembers > 0) {
-    return true;
-  }
-  return false;
+  return countMembers > 0;
 };
