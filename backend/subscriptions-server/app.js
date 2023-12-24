@@ -1,6 +1,9 @@
 import express, { json } from "express";
 import cors from "cors";
+import { dbConnect } from "./db/mongoConnect.js";
 import { IP_SERVER, PORT_SERVER } from "./environments.js";
+
+dbConnect();
 
 const app = express();
 
