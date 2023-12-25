@@ -12,5 +12,6 @@ export const insertAdmin = async () => {
   };
 
   const userAdmin = new userModel(admin);
-  const adminId = await userAdmin.save();
+  const { _id } =  await userAdmin.save();
+  return _id;
 };
