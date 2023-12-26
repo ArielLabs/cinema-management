@@ -1,4 +1,7 @@
 import userModel from "../models/userModel.js";
+import { initialUsers } from "../DAL/usersFile.js";
+import { initialPermissions } from "../DAL/permissionsFile.js";
+import { personalInfo, permissions } from "../constants/admin.js";
 import { ADMIN_USERNAME, ADMIN_PASSWORD } from "../environment.js";
 import { hash } from "bcrypt";
 
@@ -12,6 +15,26 @@ export const insertAdmin = async () => {
   };
 
   const userAdmin = new userModel(admin);
-  const { _id } =  await userAdmin.save();
-  return _id;
+  const { _id } = await userAdmin.save();
+  
+  const detailsAdmin = {
+    Id: _id,
+    ...personalInfo,
+    CreatedDate: new Date().toLocaleString(),
+  };
+
+  const permissionsAdmin = {
+    Id: _id,
+    Permissions: permissions,
+  };
+
+  await Promise.all([
+    initialUsers(detailsAdmin),
+    initialPermissions(permissionsAdmin),
+  ]);
+};
+
+export const hasUsers = async () => {
+  const usersCount = await userModel.countDocuments();
+  return usersCount > 0;
 };

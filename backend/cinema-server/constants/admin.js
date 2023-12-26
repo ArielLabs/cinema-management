@@ -1,4 +1,4 @@
-export const details = {
+export const personalInfo = {
   FirstName: "Ron",
   LastName: "Levi",
   SessionTimeOut: 60,
