@@ -1,3 +1,4 @@
+import LoginForm from "../../components/LoginForm/LoginForm";
 import logo from "../../assets/cinema.jpg";
 import styles from "./LoginPage.module.css";
 
@@ -5,8 +6,8 @@ const LoginPage = () => {
     return(
         <div className={styles.loginPage}>
             <div className={styles.logoImg} style={{backgroundImage: `url(${logo})`}}></div>
-            <div className={styles.loginForm}>
-                <h3>Login</h3>
+            <div className={styles.loginFormSection}>
+                <LoginForm />
             </div>
         </div>
     );
