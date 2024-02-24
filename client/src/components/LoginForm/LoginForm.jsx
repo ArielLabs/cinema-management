@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
 
 const LoginForm = () => {
+  const currentYear = new Date().getFullYear();
   return (
     <div className={styles.loginForm}>
       <div className={styles.loginFormContainer}>
@@ -33,6 +34,7 @@ const LoginForm = () => {
         </div>
         <div className={styles.loginFormActions}>
           <Button
+            type="submit"
             variant="contained"
             sx={{ fontWeight: "500", marginBottom: "1.25rem" }}
           >
@@ -42,6 +44,11 @@ const LoginForm = () => {
             Don&apos;t have an account? <a>Sign Up</a>
           </span>
         </div>
+      </div>
+      <div>
+        <span className={styles.loginFormCopyrights}>
+          Copyright © Cinema {currentYear}
+        </span>
       </div>
     </div>
   );
