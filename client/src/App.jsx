@@ -1,15 +1,17 @@
-// import Header from "./components/Header/Header";
+import Header from "./components/Header/Header";
 import styles from "./App.module.css";
+import MoviesPage from "./pages/MoviesPage/MoviesPage";
 // import LoginPage from "./pages/LoginPage/LoginPage";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
+// import RegisterPage from "./pages/RegisterPage/RegisterPage";
 
 
 function App() {
   return (
     <div className={styles.app}>
-      {/* <Header /> */}
+      <Header />
+      <MoviesPage />
       {/* <LoginPage /> */}
-      <RegisterPage />
+      {/* <RegisterPage /> */}
     </div>
   );
 }

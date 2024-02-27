@@ -1,15 +1,19 @@
 import movieModel from "../models/movieModel.js";
-import { getMoviesFromAPI } from "../DAL/moviesWS.js";
+import { getMoviesFromFile } from "../DAL/moviesFile.js";
 
 export const insertMovies = async () => {
-  const { data: allMovies } = await getMoviesFromAPI();
+  const { movies: allMovies } = await getMoviesFromFile();
 
   const movies = allMovies.map((movie) => {
     return {
       Name: movie.name,
+      Plot: movie.plot,
       Genres: movie.genres,
-      Image: movie.image.medium,
+      Image: movie.image,
+      Trailer: movie.trailer,
+      Runtime: movie.runtime,
       Premiered: movie.premiered,
+      AgeRestriction: movie.ageRestriction
     };
   });
 
