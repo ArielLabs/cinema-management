@@ -40,6 +40,10 @@
     width: 85%;
 }
 
+.signupLink{
+    color: #646cff;
+}
+
 .loginFormCopyrights{
     color: gray;
     font-size: 0.875rem;

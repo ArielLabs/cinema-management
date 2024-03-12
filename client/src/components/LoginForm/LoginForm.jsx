@@ -1,13 +1,42 @@
+import useInput from "../../hooks/use-input";
+import { NavLink } from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
 
 const LoginForm = () => {
+  const {
+    value: emailEnteredValue,
+    valueInputChangedHandler: emailInputChangedHandler,
+    valueInputBlurHandler: emailInputBlurHandler,
+    validValue: validEmail,
+    error: emailError
+  } = useInput("", (val) => val.trim().length > 0);
+
+  const {
+    value: passwordEnteredValue,
+    valueInputChangedHandler: passwordInputChangedHandler,
+    valueInputBlurHandler: passwordInputBlurHandler,
+    validValue: validPassword,
+    error: passwordError
+  } = useInput("", (val) => val.trim().length > 0);
+
+  const submitSigninHandler = (event) => {
+    event.preventDefault();
+
+    const loginUser = {
+      email: emailEnteredValue,
+      password: passwordEnteredValue
+    };
+    console.log(loginUser);
+  }
+
+  const validForm = validEmail && validPassword;
   const currentYear = new Date().getFullYear();
   return (
     <div className={styles.loginForm}>
-      <div className={styles.loginFormContainer}>
+      <form className={styles.loginFormContainer} onSubmit={submitSigninHandler}>
         <div className={styles.loginFormHeader}>
           <LockOutlinedIcon
             sx={{
@@ -22,14 +51,22 @@ const LoginForm = () => {
             required
             autoComplete="off"
             label="Email"
+            type="email"
             variant="outlined"
             sx={{ margin: "1.5rem 0" }}
+            onChange={emailInputChangedHandler}
+            onBlur={emailInputBlurHandler}
+            error={emailError}
           />
           <TextField
             required
             autoComplete="off"
             label="Password"
+            type="password"
             variant="outlined"
+            onChange={passwordInputChangedHandler}
+            onBlur={passwordInputBlurHandler}
+            error={passwordError}
           />
         </div>
         <div className={styles.loginFormActions}>
@@ -37,14 +74,18 @@ const LoginForm = () => {
             type="submit"
             variant="contained"
             sx={{ fontWeight: "500", marginBottom: "1.25rem" }}
+            disabled={!validForm}
           >
             Sign in
           </Button>
           <span>
-            Don&apos;t have an account? <a>Sign Up</a>
+            Don&apos;t have an account?{" "}
+            <NavLink to={"/register"} className={styles.signupLink}>
+              Sign Up
+            </NavLink>
           </span>
         </div>
-      </div>
+      </form>
       <div>
         <span className={styles.loginFormCopyrights}>
           Copyright © Cinema {currentYear}
