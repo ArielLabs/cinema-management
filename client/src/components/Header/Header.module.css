@@ -3,17 +3,48 @@
     height: 12%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: black;
     box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
 }
 
 .toolbar{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerUser{
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
     padding-right: 24px;
     padding-left: 24px;
+    color: white;
 }
 
 .titleApp{
     font: inherit;
     font-size: 1.5rem;
     color: white;
+}
+
+.navlinks{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.link{
+    margin: 0 1rem;
+}
+
+.activeLink{
+    margin: 0 1rem;
+    color: #646cff;
 }
