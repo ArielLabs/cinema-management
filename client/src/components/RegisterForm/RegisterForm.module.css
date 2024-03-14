@@ -39,6 +39,10 @@
     flex-direction: row;
 }
 
+.guidePassword{
+    font-size: 12px;
+}
+
 .registerFormActions{
     display: flex;
     flex-direction: column;

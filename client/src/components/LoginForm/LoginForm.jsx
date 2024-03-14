@@ -12,7 +12,10 @@ const LoginForm = () => {
     valueInputBlurHandler: emailInputBlurHandler,
     validValue: validEmail,
     error: emailError
-  } = useInput("", (val) => val.trim().length > 0);
+  } = useInput("", (emailValue) => {
+    const regex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\[\]\\.,;:\s@\"]+\.)+[^<>()\[\]\\.,;:\s@\"]{2,})$/i;
+    return regex.test(String(emailValue).toLowerCase());
+  });
 
   const {
     value: passwordEnteredValue,
@@ -20,7 +23,13 @@ const LoginForm = () => {
     valueInputBlurHandler: passwordInputBlurHandler,
     validValue: validPassword,
     error: passwordError
-  } = useInput("", (val) => val.trim().length > 0);
+  } = useInput("", (passwordValue) => {
+    if(passwordValue.trim().length < 6 || passwordValue.trim().length > 10) return false;
+    if(!/[a-z]/.test(passwordValue)) return false;
+    if(!/[A-Z]/.test(passwordValue)) return false;
+    if(!/[0-9]/.test(passwordValue)) return false;
+    return true;
+  });
 
   const submitSigninHandler = (event) => {
     event.preventDefault();

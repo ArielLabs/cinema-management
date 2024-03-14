@@ -27,7 +27,10 @@ const RegisterForm = () => {
     valueInputBlurHandler: emailInputBlurHandler,
     validValue: validEmail,
     error: emailError,
-  } = useInput("", (val) => val.trim().length > 0);
+  } = useInput("", (emailValue) => {
+    const regex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\[\]\\.,;:\s@\"]+\.)+[^<>()\[\]\\.,;:\s@\"]{2,})$/i;
+    return regex.test(String(emailValue).toLowerCase());
+  });
 
   const {
     value: password,
@@ -35,7 +38,13 @@ const RegisterForm = () => {
     valueInputBlurHandler: passwordInputBlurHandler,
     validValue: validPassword,
     error: passwordError,
-  } = useInput("", (val) => val.trim().length > 0);
+  } = useInput("", (passwordValue) => {
+    if(passwordValue.trim().length < 6 || passwordValue.trim().length > 10) return false;
+    if(!/[a-z]/.test(passwordValue)) return false;
+    if(!/[A-Z]/.test(passwordValue)) return false;
+    if(!/[0-9]/.test(passwordValue)) return false;
+    return true;
+  });
 
   const submitRegisterHandler = (event) => {
     event.preventDefault();
@@ -113,6 +122,7 @@ const RegisterForm = () => {
             onBlur={passwordInputBlurHandler}
             error={passwordError}
           />
+          <span className={styles.guidePassword}>Password: 6-10 characters, including at least one lowercase, one uppercase and one number.</span>
         </div>
         <div className={styles.registerFormActions}>
           <Button
