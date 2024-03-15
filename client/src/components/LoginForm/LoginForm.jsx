@@ -1,19 +1,29 @@
+import { useState } from "react";
 import useInput from "../../hooks/use-input";
 import { NavLink } from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
 import styles from "./LoginForm.module.css";
 
 const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     value: emailEnteredValue,
     valueInputChangedHandler: emailInputChangedHandler,
     valueInputBlurHandler: emailInputBlurHandler,
     validValue: validEmail,
-    error: emailError
+    error: emailError,
   } = useInput("", (emailValue) => {
-    const regex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\[\]\\.,;:\s@\"]+\.)+[^<>()\[\]\\.,;:\s@\"]{2,})$/i;
+    const regex =
+      /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\[\]\\.,;:\s@\"]+\.)+[^<>()\[\]\\.,;:\s@\"]{2,})$/i;
     return regex.test(String(emailValue).toLowerCase());
   });
 
@@ -22,30 +32,37 @@ const LoginForm = () => {
     valueInputChangedHandler: passwordInputChangedHandler,
     valueInputBlurHandler: passwordInputBlurHandler,
     validValue: validPassword,
-    error: passwordError
+    error: passwordError,
   } = useInput("", (passwordValue) => {
-    if(passwordValue.trim().length < 6 || passwordValue.trim().length > 10) return false;
-    if(!/[a-z]/.test(passwordValue)) return false;
-    if(!/[A-Z]/.test(passwordValue)) return false;
-    if(!/[0-9]/.test(passwordValue)) return false;
+    if (passwordValue.trim().length < 6 || passwordValue.trim().length > 10) return false;
+    if (!/[a-z]/.test(passwordValue)) return false;
+    if (!/[A-Z]/.test(passwordValue)) return false;
+    if (!/[0-9]/.test(passwordValue)) return false;
     return true;
   });
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const submitSigninHandler = (event) => {
     event.preventDefault();
 
     const loginUser = {
       email: emailEnteredValue,
-      password: passwordEnteredValue
+      password: passwordEnteredValue,
     };
     console.log(loginUser);
-  }
+  };
 
   const validForm = validEmail && validPassword;
   const currentYear = new Date().getFullYear();
   return (
     <div className={styles.loginForm}>
-      <form className={styles.loginFormContainer} onSubmit={submitSigninHandler}>
+      <form
+        className={styles.loginFormContainer}
+        onSubmit={submitSigninHandler}
+      >
         <div className={styles.loginFormHeader}>
           <LockOutlinedIcon
             sx={{
@@ -53,7 +70,7 @@ const LoginForm = () => {
               fontSize: "1.75rem",
             }}
           />
-          <span className={styles.loginFormTitle}>Signin</span>
+          <span className={styles.loginFormTitle}>Sign in</span>
         </div>
         <div className={styles.loginFormDetails}>
           <TextField
@@ -67,16 +84,23 @@ const LoginForm = () => {
             onBlur={emailInputBlurHandler}
             error={emailError}
           />
-          <TextField
-            required
-            autoComplete="off"
-            label="Password"
-            type="password"
-            variant="outlined"
-            onChange={passwordInputChangedHandler}
-            onBlur={passwordInputBlurHandler}
-            error={passwordError}
-          />
+          <FormControl variant="outlined" required={true} error={passwordError}>
+            <InputLabel>Password</InputLabel>
+            <OutlinedInput
+              label="Password"
+              autoComplete="off"
+              onChange={passwordInputChangedHandler}
+              onBlur={passwordInputBlurHandler}
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
         </div>
         <div className={styles.loginFormActions}>
           <Button

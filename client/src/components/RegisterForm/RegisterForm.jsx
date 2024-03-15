@@ -1,10 +1,19 @@
+import { useState } from "react";
 import useInput from "../../hooks/use-input";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
 import styles from "./RegisterForm.module.css";
 
 const RegisterForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     value: firstname,
     valueInputChangedHandler: firstnameInputChangedHandler,
@@ -28,7 +37,8 @@ const RegisterForm = () => {
     validValue: validEmail,
     error: emailError,
   } = useInput("", (emailValue) => {
-    const regex = /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\[\]\\.,;:\s@\"]+\.)+[^<>()\[\]\\.,;:\s@\"]{2,})$/i;
+    const regex =
+      /^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\[\]\\.,;:\s@\"]+\.)+[^<>()\[\]\\.,;:\s@\"]{2,})$/i;
     return regex.test(String(emailValue).toLowerCase());
   });
 
@@ -39,12 +49,17 @@ const RegisterForm = () => {
     validValue: validPassword,
     error: passwordError,
   } = useInput("", (passwordValue) => {
-    if(passwordValue.trim().length < 6 || passwordValue.trim().length > 10) return false;
-    if(!/[a-z]/.test(passwordValue)) return false;
-    if(!/[A-Z]/.test(passwordValue)) return false;
-    if(!/[0-9]/.test(passwordValue)) return false;
+    if (passwordValue.trim().length < 6 || passwordValue.trim().length > 10)
+      return false;
+    if (!/[a-z]/.test(passwordValue)) return false;
+    if (!/[A-Z]/.test(passwordValue)) return false;
+    if (!/[0-9]/.test(passwordValue)) return false;
     return true;
   });
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const submitRegisterHandler = (event) => {
     event.preventDefault();
@@ -112,17 +127,27 @@ const RegisterForm = () => {
             onBlur={emailInputBlurHandler}
             error={emailError}
           />
-          <TextField
-            required
-            autoComplete="off"
-            label="Password"
-            type="password"
-            variant="outlined"
-            onChange={passwordInputChangedHandler}
-            onBlur={passwordInputBlurHandler}
-            error={passwordError}
-          />
-          <span className={styles.guidePassword}>Password: 6-10 characters, including at least one lowercase, one uppercase and one number.</span>
+          <FormControl variant="outlined" required={true} error={passwordError}>
+            <InputLabel>Password</InputLabel>
+            <OutlinedInput
+              label="Password"
+              autoComplete="off"
+              onChange={passwordInputChangedHandler}
+              onBlur={passwordInputBlurHandler}
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <span className={styles.guidePassword}>
+            Password: 6-10 characters, including at least one lowercase, one
+            uppercase and one number.
+          </span>
         </div>
         <div className={styles.registerFormActions}>
           <Button
