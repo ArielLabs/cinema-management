@@ -1,0 +1,13 @@
+.permissionChip{
+    color: white;
+    padding: 0.375rem 0.5rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1;
+    margin: 0 5px;
+}
