@@ -19,8 +19,7 @@ export const insertAdmin = async () => {
   
   const detailsAdmin = {
     Id: _id,
-    ...personalInfo,
-    CreatedDate: new Date().toLocaleString(),
+    ...personalInfo
   };
 
   const permissionsAdmin = {

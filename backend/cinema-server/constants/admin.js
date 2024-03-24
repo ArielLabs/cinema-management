@@ -2,13 +2,10 @@ export const personalInfo = {
   FirstName: "Ron",
   LastName: "Levi",
   SessionTimeOut: 60,
+  CreatedDate: new Date().toLocaleString()
 };
 
-export const permissions = [
-  "View Subscriptions",
-  "Create Subscriptions",
-  "Delete Subscriptions",
-  "View Movies",
-  "Create Movies",
-  "Delete Movies",
-];
+export const permissions = {
+  movies: ["View", "Create", "Edit", "Delete"],
+  subscriptions: ["View", "Create", "Edit", "Delete"]
+}

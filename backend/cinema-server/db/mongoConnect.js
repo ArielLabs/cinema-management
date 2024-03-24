@@ -12,9 +12,7 @@ export const dbConnect = async () => {
       await insertAdmin();
     }
 
-    console.log(
-      "The data of the administrator are in a users database, users file and permissions file"
-    );
+    console.log("The data of the administrator are in a usersDB, users.json and permissions.json");
   } catch (err) {
     console.log(err);
   }
