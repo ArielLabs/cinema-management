@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { displayAlert } from "../../utils/alerts";
+import axios from "axios";
+import env from "../../environment";
 import useInput from "../../hooks/use-input";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
@@ -14,6 +18,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styles from "./LoginForm.module.css";
 
 const LoginForm = () => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
   const {
     value: emailEnteredValue,
@@ -34,11 +39,27 @@ const LoginForm = () => {
     validValue: validPassword,
     error: passwordError,
   } = useInput("", (passwordValue) => {
-    if (passwordValue.trim().length < 6 || passwordValue.trim().length > 10) return false;
+    if (passwordValue.trim().length < 6 || passwordValue.trim().length > 10)
+      return false;
     if (!/[a-z]/.test(passwordValue)) return false;
     if (!/[A-Z]/.test(passwordValue)) return false;
     if (!/[0-9]/.test(passwordValue)) return false;
     return true;
+  });
+
+  const userLogin = (userDetails) => {
+    return axios.get(`${env.apiURL}/auth/login`, { params: userDetails });
+  };
+
+  const { mutate: userSignin } = useMutation({
+    mutationFn: userLogin,
+    onSuccess: () => {
+      navigate('/cinema/movies');
+    },
+    onError: (err) => {
+      const contentError = err.response.data.message;
+      displayAlert("error", contentError);
+    }
   });
 
   const handleClickShowPassword = () => {
@@ -48,11 +69,11 @@ const LoginForm = () => {
   const submitSigninHandler = (event) => {
     event.preventDefault();
 
-    const loginUser = {
+    const loginUserDetails = {
       email: emailEnteredValue,
       password: passwordEnteredValue,
     };
-    console.log(loginUser);
+    userSignin(loginUserDetails);
   };
 
   const validForm = validEmail && validPassword;
