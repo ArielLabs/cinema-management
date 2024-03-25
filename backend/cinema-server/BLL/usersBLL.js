@@ -2,7 +2,7 @@ import userModel from "../models/userModel.js";
 import { initialUsers } from "../DAL/usersFile.js";
 import { initialPermissions } from "../DAL/permissionsFile.js";
 import { personalInfo, permissions } from "../constants/admin.js";
-import { ADMIN_USERNAME, ADMIN_PASSWORD } from "../environment.js";
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../environment.js";
 import { hash } from "bcrypt";
 
 export const insertAdmin = async () => {
@@ -10,7 +10,7 @@ export const insertAdmin = async () => {
   const password = await hash(ADMIN_PASSWORD, saltRounds);
 
   const admin = {
-    UserName: ADMIN_USERNAME,
+    Email: ADMIN_EMAIL,
     Password: password,
   };
 
