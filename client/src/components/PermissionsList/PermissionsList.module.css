@@ -1,0 +1,11 @@
+.checkPermissions{
+    display: flex;
+    flex-direction: column;
+    width: 38%;
+}
+
+.titlePermission{
+    color: #b4b2b2;
+    font-size: 1rem;
+    font-weight: 500;
+}

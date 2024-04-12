@@ -9,3 +9,16 @@ export const initialPermissions = async (admin) => {
     { spaces: 2 }
   );
 };
+
+export const writePermissions = async (user) => {
+  const { permissions: allUsersPermissions } = await jsonfile.readFile(
+    permissionsFile
+  );
+  allUsersPermissions.push(user);
+  
+  await jsonfile.writeFile(
+    permissionsFile,
+    { permissions: allUsersPermissions },
+    { spaces: 2 }
+  );
+};

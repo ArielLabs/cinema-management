@@ -1,24 +1,19 @@
 import { useState } from "react";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { displayAlert } from "../../utils/alerts";
+import axios from "axios";
+import env from "../../environment";
 import useInput from "../../hooks/use-input";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import styles from "./NewUserForm.module.css";
+import PermissionsList from "../PermissionsList/PermissionsList";
 
 const NewUserForm = () => {
-  const [moviesChecked, setMoviesChecked] = useState([
-    { permission: "View", checked: false },
-    { permission: "Create", checked: false },
-    { permission: "Delete", checked: false },
-    { permission: "Edit", checked: false },
-  ]);
-  const [subscriptionsChecked, setSubscriptionsChecked] = useState([
-    { permission: "View", checked: false },
-    { permission: "Create", checked: false },
-    { permission: "Delete", checked: false },
-    { permission: "Edit", checked: false },
-  ]);
+  const navigate = useNavigate();
+  const [moviesPermissions, setMoviesPermissions] = useState([]);
+  const [subscriptionsPermissions, setSubscriptionsPermissions] = useState([]);
 
   const {
     value: firstname,
@@ -60,175 +55,37 @@ const NewUserForm = () => {
     return true;
   });
 
-  const viewChangedHandler = (event) => {
-    if (event.target.name === "movies") {
-      setMoviesChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: prevState[3].checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
+  const onUpdatePermissionsHandler = (updatedPermission, groupname) => {
+    const receivedPermissions = updatedPermission
+      .filter((p) => p.checked)
+      .map((p) => p.permission);
+    if (groupname === "Movies") {
+      setMoviesPermissions(receivedPermissions);
     } else {
-      setSubscriptionsChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: prevState[3].checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
+      setSubscriptionsPermissions(receivedPermissions);
     }
   };
 
-  const createChangedHandler = (event) => {
-    if (event.target.name === "movies") {
-      setMoviesChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: prevState[3].checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: prevState[0].checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
-    } else {
-      setSubscriptionsChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: prevState[3].checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: prevState[0].checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
-    }
+  const sendNewUser = (newUserDetails) => {
+    return axios.post(`${env.apiURL}/users`, newUserDetails);
   };
 
-  const deleteChangedHandler = (event) => {
-    if (event.target.name === "movies") {
-      setMoviesChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: prevState[3].checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: prevState[0].checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
+  const { mutate: createNewUser } = useMutation({
+    mutationFn: sendNewUser,
+    onSuccess: (res) => {
+      const { message } = res.data;
+      displayAlert("success", message).then(() => {
+        navigate("/cinema/users");
       });
-    } else {
-      setSubscriptionsChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: prevState[3].checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: prevState[0].checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
-    }
-  };
-
-  const editChangedHandler = (event) => {
-    if (event.target.name === "movies") {
-      setMoviesChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: prevState[0].checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
-    } else {
-      setSubscriptionsChecked((prevState) => {
-        if (event.target.checked) {
-          return [
-            { permission: "View", checked: event.target.checked },
-            { permission: "Create", checked: event.target.checked },
-            { permission: "Delete", checked: event.target.checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        } else {
-          return [
-            { permission: "View", checked: prevState[0].checked },
-            { permission: "Create", checked: prevState[1].checked },
-            { permission: "Delete", checked: prevState[2].checked },
-            { permission: "Edit", checked: event.target.checked },
-          ];
-        }
-      });
-    }
-  };
+    },
+    onError: (err) => {
+      const { message } = err.response.data;
+      displayAlert("error", message);
+    },
+  });
 
   const submitNewUserFormHandler = (event) => {
     event.preventDefault();
-
-    const moviesPermissions = moviesChecked
-      .filter((m) => m.checked)
-      .map((m) => m.permission);
-    const subscriptionsPermissions = subscriptionsChecked
-      .filter((s) => s.checked)
-      .map((s) => s.permission);
 
     const newUser = {
       FirstName: firstname,
@@ -237,13 +94,14 @@ const NewUserForm = () => {
       SessionTimeOut: sessionTimeout,
       Permissions: {
         movies: moviesPermissions,
-        subscriptions: subscriptionsPermissions
-      }
-    }
-    console.log(newUser);
+        subscriptions: subscriptionsPermissions,
+      },
+    };
+    createNewUser(newUser);
   };
 
-  const validForm = validFirstname && validLastname && validSessionTimeout && validEmail;
+  const validForm =
+    validFirstname && validLastname && validSessionTimeout && validEmail;
   return (
     <form
       className={styles.newUserFormContainer}
@@ -382,170 +240,34 @@ const NewUserForm = () => {
             />
           </div>
         </div>
-
         <div className={styles.coupleFields}>
-          <div className={styles.checkPermissions}>
-            <span className={styles.titlePermission}>Movies Permission:</span>
-            <FormControlLabel
-              label="View"
-              control={
-                <Checkbox
-                  name="movies"
-                  color="default"
-                  checked={moviesChecked[0].checked}
-                  onChange={viewChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-            <FormControlLabel
-              label="Create"
-              control={
-                <Checkbox
-                  name="movies"
-                  color="default"
-                  checked={moviesChecked[1].checked}
-                  onChange={createChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-            <FormControlLabel
-              label="Delete"
-              control={
-                <Checkbox
-                  name="movies"
-                  color="default"
-                  checked={moviesChecked[2].checked}
-                  onChange={deleteChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-            <FormControlLabel
-              label="Edit"
-              control={
-                <Checkbox
-                  name="movies"
-                  color="default"
-                  checked={moviesChecked[3].checked}
-                  onChange={editChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-          </div>
-          <div className={styles.checkPermissions}>
-            <span className={styles.titlePermission}>
-              Subscriptions Permission:
-            </span>
-            <FormControlLabel
-              label="View"
-              control={
-                <Checkbox
-                  name="subscriptions"
-                  color="default"
-                  checked={subscriptionsChecked[0].checked}
-                  onChange={viewChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-            <FormControlLabel
-              label="Create"
-              control={
-                <Checkbox
-                  name="subscriptions"
-                  color="default"
-                  checked={subscriptionsChecked[1].checked}
-                  onChange={createChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-            <FormControlLabel
-              label="Delete"
-              control={
-                <Checkbox
-                  name="subscriptions"
-                  color="default"
-                  checked={subscriptionsChecked[2].checked}
-                  onChange={deleteChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-            <FormControlLabel
-              label="Edit"
-              control={
-                <Checkbox
-                  name="subscriptions"
-                  color="default"
-                  checked={subscriptionsChecked[3].checked}
-                  onChange={editChangedHandler}
-                  sx={{
-                    color: "gray",
-                    "&.Mui-checked": {
-                      color: "gray",
-                    },
-                  }}
-                />
-              }
-              sx={{ color: "#b4b2b2" }}
-            />
-          </div>
+          <PermissionsList
+            groupname="Movies"
+            onTransferPermissions={onUpdatePermissionsHandler}
+          />
+          <PermissionsList
+            groupname="Subscriptions"
+            onTransferPermissions={onUpdatePermissionsHandler}
+          />
         </div>
       </div>
       <div className={styles.actions}>
         <Button
           type="submit"
-          variant="contained"
+          variant="outlined"
           disabled={!validForm}
-          sx={{ bgcolor: "#383636", "&:hover": { bgcolor: "#514f4f" } }}
+          sx={{
+            width: "6rem",
+            "&.Mui-disabled": {
+              border: "1px solid gray",
+              color: "gray",
+            },
+          }}
         >
-          Add
+          Save
+        </Button>
+        <Button type="submit" variant="outlined" sx={{ width: "6rem" }}>
+          Cancel
         </Button>
       </div>
     </form>

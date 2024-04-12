@@ -5,3 +5,10 @@ const usersFile = "data/users.json";
 export const initialUsers = async (admin) => {
   await jsonfile.writeFile(usersFile, { users: [admin] }, { spaces: 2 });
 };
+
+export const writeUser = async (user) => {
+  const { users: allUsers } = await jsonfile.readFile(usersFile);
+
+  allUsers.push(user);
+  await jsonfile.writeFile(usersFile, { users: allUsers }, { spaces: 2 });
+};
