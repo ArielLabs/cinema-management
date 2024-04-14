@@ -1,7 +1,7 @@
 .usersTableContainer{
     width: 94%;
-    height: 88%;
-    margin-top: 2rem;
+    height: 82%;
+    margin-top: 1rem;
 }
 
 .usersTable{
@@ -42,7 +42,7 @@ table {
 
 th{
     color: #ccc;
-    background-color: black;
+    background-color: #010229;
 }
 
 th:first-child{
@@ -63,8 +63,8 @@ tr:last-child{
 }
 
 .userRow{
-    height: 5.5rem;
-    background-color: #35353c;
+    height: 5.25rem;
+    background-color: #363651;
     border-bottom: 1px solid white;
     flex: 1;
 }

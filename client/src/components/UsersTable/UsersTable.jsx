@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import AddIcon from '@mui/icons-material/Add';
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import styles from "./UsersTable.module.css";
@@ -6,8 +9,30 @@ import PermissionChip from "../PermissionChip/PermissionChip";
 
 const UsersTable = (prop) => {
   const { users } = prop;
+  const navigate = useNavigate();
+
+  const newUserHandler = () => {
+    navigate("/cinema/users/new");
+  };
+
   return (
     <div className={styles.usersTableContainer}>
+      <Button
+        variant="contained"
+        startIcon={<AddIcon />}
+        sx={{
+          marginBottom: "1rem",
+          marginRight: "1rem",
+          textTransform: "none",
+          backgroundColor: "#646cff",
+          '&:hover':{
+            backgroundColor: "#4a54fb"
+          }
+        }}
+        onClick={newUserHandler}
+      >
+        New User
+      </Button>
       <table className={styles.usersTable}>
         <thead>
           <tr className={styles.titlesColumns}>

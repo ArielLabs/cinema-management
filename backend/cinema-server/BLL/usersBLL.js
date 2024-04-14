@@ -1,7 +1,8 @@
 import userModel from "../models/userModel.js";
-import { initialUsers, writeUser } from "../DAL/usersFile.js";
+import { initialUsers, readUsers, writeUser } from "../DAL/usersFile.js";
 import {
   initialPermissions,
+  readPermissions,
   writePermissions,
 } from "../DAL/permissionsFile.js";
 import { personalInfo, permissions } from "../constants/admin.js";
@@ -22,12 +23,12 @@ export const insertAdmin = async () => {
   const { _id } = await userAdmin.save();
 
   const detailsAdmin = {
-    Id: _id,
+    _id,
     ...personalInfo,
   };
 
   const permissionsAdmin = {
-    Id: _id,
+    _id,
     Permissions: permissions,
   };
 
@@ -42,12 +43,46 @@ export const hasUsers = async () => {
   return usersCount > 0;
 };
 
+export const getUsers = async () => {
+  const allUsersDB = await userModel.find();
+  const { users: allUsersFile } = await readUsers();
+  const { permissions: allUsersPermissions } = await readPermissions();
+
+  const usersFullData = [];
+  for (const user of allUsersDB) {
+    const userDetails = allUsersFile.find((u) => u._id == user._id);
+    const { Permissions } = allUsersPermissions.find((u) => u._id == user._id);
+    const { movies, subscriptions } = Permissions;
+
+    const moviesPermissions = movies.map((permission) => {
+      return {
+        id: uuidv4(),
+        permission,
+      };
+    });
+    const subscriptionsPermissions = subscriptions.map((permission) => {
+      return {
+        id: uuidv4(),
+        permission,
+      };
+    });
+
+    usersFullData.push({
+      ...userDetails,
+      email: user.Email,
+      moviesPermissions,
+      subscriptionsPermissions,
+    });
+  }
+  return usersFullData;
+};
+
 export const createUser = async (newUser) => {
   const { FirstName, LastName, Email, SessionTimeOut, Permissions } = newUser;
   const tempPassword = await hash(uuidv4(), 10);
 
-  const user = await userModel.findOne({Email: Email});
-  if(user){
+  const user = await userModel.findOne({ Email: Email });
+  if (user) {
     throw new Error("User already exists");
   }
 
@@ -55,15 +90,19 @@ export const createUser = async (newUser) => {
   const { _id } = await docUser.save();
 
   const detailsUser = {
-    Id: _id,
+    _id,
     FirstName,
     LastName,
     SessionTimeOut,
-    CreatedDate: new Date().toLocaleString(),
+    CreatedDate: new Date().toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }),
   };
 
   const detailsPermissions = {
-    Id: _id,
+    _id,
     Permissions,
   };
 
@@ -72,5 +111,5 @@ export const createUser = async (newUser) => {
     writePermissions(detailsPermissions),
   ]);
 
-  return "Saved successfully!"
+  return "Saved successfully!";
 };
