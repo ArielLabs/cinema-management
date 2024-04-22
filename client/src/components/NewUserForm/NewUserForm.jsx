@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { displayAlert } from "../../utils/alerts";
 import axios from "axios";
@@ -12,6 +12,7 @@ import PermissionsList from "../PermissionsList/PermissionsList";
 
 const NewUserForm = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [moviesPermissions, setMoviesPermissions] = useState([]);
   const [subscriptionsPermissions, setSubscriptionsPermissions] = useState([]);
 
@@ -75,7 +76,9 @@ const NewUserForm = () => {
     onSuccess: (res) => {
       const { message } = res.data;
       displayAlert("success", message).then(() => {
-        navigate("/cinema/users");
+        queryClient.invalidateQueries("fetch-users").then(() => {
+          navigate("/cinema/users");
+        });
       });
     },
     onError: (err) => {

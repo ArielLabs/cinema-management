@@ -48,7 +48,7 @@ const UsersTable = (prop) => {
         </thead>
         <tbody className={styles.scrollableTbody}>
           {users.map((user) => (
-            <tr key={user.id} className={styles.userRow}>
+            <tr key={user._id} className={styles.userRow}>
               <td style={{ width: "8%" }}>
                 <IconButton sx={{ color: "#fa626e" }}>
                   <ClearIcon />
@@ -59,39 +59,39 @@ const UsersTable = (prop) => {
               </td>
               <td style={{ width: "25%" }}>
                 <div className={styles.sectionNameEmail}>
-                  <div className={styles.userAvatar}>{user.firstname[0]}</div>
+                  <div className={styles.userAvatar}>{user.FirstName[0]}</div>
                   <div className={styles.contentNameEmail}>
                     <span className={styles.fullname}>
-                      {user.firstname} {user.lastname}
+                      {user.FirstName} {user.LastName}
                     </span>
-                    <span className={styles.email}>{user.email}</span>
+                    <span className={styles.email}>{user.Email}</span>
                   </div>
                 </div>
               </td>
               <td style={{ width: "11%" }} className={styles.sessionSection}>
-                {user.sessionTimeout}
+                {user.SessionTimeOut} mins
               </td>
               <td style={{ width: "22%" }}>
                 <div className={styles.permissionSection}>
-                  {user.moviesPermissions.map((moviePermission, idx) => (
-                    <PermissionChip key={idx} content={moviePermission} />
+                  {user.moviesPermissions.map((moviePermission) => (
+                    <PermissionChip key={moviePermission.id} content={moviePermission.permission} />
                   ))}
                 </div>
               </td>
               <td style={{ width: "22%" }}>
                 <div className={styles.permissionSection}>
                   {user.subscriptionsPermissions.map(
-                    (subscriptionsPermission, idx) => (
+                    (subscriptionsPermission) => (
                       <PermissionChip
-                        key={idx}
-                        content={subscriptionsPermission}
+                        key={subscriptionsPermission.id}
+                        content={subscriptionsPermission.permission}
                       />
                     )
                   )}
                 </div>
               </td>
               <td style={{ width: "12%" }} className={styles.createSection}>
-                {user.createdDate}
+                {user.CreatedDate}
               </td>
             </tr>
           ))}

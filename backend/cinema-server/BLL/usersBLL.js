@@ -69,7 +69,7 @@ export const getUsers = async () => {
 
     usersFullData.push({
       ...userDetails,
-      email: user.Email,
+      Email: user.Email,
       moviesPermissions,
       subscriptionsPermissions,
     });
