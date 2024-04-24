@@ -7,21 +7,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 import styles from "./UsersTable.module.css";
 import PermissionChip from "../PermissionChip/PermissionChip";
 import SkeletonTable from "../SkeletonTable/SkeletonTable";
-import { useState, useEffect } from "react";
 
 const UsersTable = (prop) => {
   const { users, isLoading } = prop;
   const navigate = useNavigate();
-  const [showSkeleton, setShowSkeleton] = useState(false);
 
-  useEffect(() => {
-    if (isLoading) {
-      setShowSkeleton(true);
-      setTimeout(() => {
-        setShowSkeleton(false);
-      }, 1250);
-    }
-  }, [isLoading]);
 
   const newUserHandler = () => {
     navigate("/cinema/users/new");
@@ -45,7 +35,7 @@ const UsersTable = (prop) => {
       >
         New User
       </Button>
-      {!showSkeleton && users && (
+      {!isLoading && (
         <table className={styles.usersTable}>
           <thead>
             <tr className={styles.titlesColumns}>
@@ -114,7 +104,7 @@ const UsersTable = (prop) => {
           </tbody>
         </table>
       )}
-      {showSkeleton && <SkeletonTable />}
+      {isLoading && <SkeletonTable />}
     </div>
   );
 };

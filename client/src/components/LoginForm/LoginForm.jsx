@@ -48,10 +48,11 @@ const LoginForm = () => {
   });
 
   const userLogin = (userDetails) => {
-    return axios.get(`${env.apiURL}/auth/login`, { params: userDetails });
+    return axios.post(`${env.apiURL}/auth/login`, userDetails);
   };
 
   const { mutate: userSignin } = useMutation({
+    mutationKey: 'user-login',
     mutationFn: userLogin,
     onSuccess: () => {
       navigate('/cinema/movies');

@@ -12,3 +12,8 @@ export const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export const SECRET_KEY = process.env.SECRET_KEY;
+
+export const MAIL_HOST = process.env.MAIL_HOST;
+export const MAIL_PORT = process.env.MAIL_PORT;
+export const MAIL_USER = process.env.MAIL_USER;
+export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;

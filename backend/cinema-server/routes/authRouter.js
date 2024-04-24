@@ -3,8 +3,8 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/login", async (req, res) => {
-  const { email, password } = req.query;
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
   try {
     const token = await authentication(email, password);
     res.status(200).json({ message: token });

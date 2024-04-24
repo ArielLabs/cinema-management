@@ -21,6 +21,7 @@ router.post("/", async (req, res) => {
     if (err.message === "User already exists") {
       return res.status(400).json({ message: err.message });
     }
+    console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });

@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { displayAlert } from "../../utils/alerts";
+import env from "../../environment";
+import axios from "axios";
 import useInput from "../../hooks/use-input";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
@@ -13,22 +18,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styles from "./RegisterForm.module.css";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const {
-    value: firstname,
-    valueInputChangedHandler: firstnameInputChangedHandler,
-    valueInputBlurHandler: firstnameInputBlurHandler,
-    validValue: validFirstname,
-    error: firstnameError,
-  } = useInput("", (val) => val.trim().length > 0);
-
-  const {
-    value: lastname,
-    valueInputChangedHandler: lastnameInputChangedHandler,
-    valueInputBlurHandler: lastnameInputBlurHandler,
-    validValue: validLastname,
-    error: lastnameError,
-  } = useInput("", (val) => val.trim().length > 0);
 
   const {
     value: email,
@@ -61,20 +52,36 @@ const RegisterForm = () => {
     setShowPassword((prevState) => !prevState);
   };
 
+  const sendUserRegister = async (details) => {
+    return await axios.put(`${env.apiURL}/auth/register`, details);
+  };
+
+  const { mutate: registerUser } = useMutation({
+    mutationKey: "user-register",
+    mutationFn: sendUserRegister,
+    onSuccess: (res) => {
+      const { message } = res.data;
+      displayAlert("success" ,message).then(() => {
+        navigate("/login");
+      });
+    },
+    onError: (err) => {
+      const contentError = err.response.data.message;
+      displayAlert("error", contentError);
+    },
+  });
+
   const submitRegisterHandler = (event) => {
     event.preventDefault();
 
     const registerDetails = {
-      firstname,
-      lastname,
       email,
       password,
     };
-    console.log(registerDetails);
+    registerUser(registerDetails);
   };
 
-  const validForm =
-    validFirstname && validLastname && validEmail && validPassword;
+  const validForm = validEmail && validPassword;
   const currentYear = new Date().getFullYear();
   return (
     <div className={styles.registerForm}>
@@ -92,30 +99,6 @@ const RegisterForm = () => {
           <span className={styles.registerFormTitle}>Sign up</span>
         </div>
         <div className={styles.registerFormDetails}>
-          <div className={styles.registerFormNames}>
-            <TextField
-              required
-              autoComplete="off"
-              label="First Name"
-              type="text"
-              variant="outlined"
-              sx={{ margin: "0 0.5rem 0 0" }}
-              onChange={firstnameInputChangedHandler}
-              onBlur={firstnameInputBlurHandler}
-              error={firstnameError}
-            />
-            <TextField
-              required
-              autoComplete="off"
-              label="Last Name"
-              type="text"
-              variant="outlined"
-              sx={{ margin: "0 0 0 0.5rem" }}
-              onChange={lastnameInputChangedHandler}
-              onBlur={lastnameInputBlurHandler}
-              error={lastnameError}
-            />
-          </div>
           <TextField
             required
             autoComplete="off"
