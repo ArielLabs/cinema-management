@@ -1,10 +1,6 @@
 import userModel from "../models/userModel.js";
-import { initialUsers, readUsers, writeUser } from "../DAL/usersFile.js";
-import {
-  initialPermissions,
-  readPermissions,
-  writePermissions,
-} from "../DAL/permissionsFile.js";
+import { readUsers, writeUsers } from "../DAL/usersFile.js";
+import { readPermissions, writePermissions } from "../DAL/permissionsFile.js";
 import { personalInfo, permissions } from "../constants/admin.js";
 import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../environment.js";
 import { sendEmail } from "../services/mail/mail.js";
@@ -34,8 +30,8 @@ export const insertAdmin = async () => {
   };
 
   await Promise.all([
-    initialUsers(detailsAdmin),
-    initialPermissions(permissionsAdmin),
+    writeUsers([detailsAdmin]),
+    writePermissions([permissionsAdmin]),
   ]);
 };
 
@@ -107,13 +103,38 @@ export const createUser = async (newUser) => {
     Permissions,
   };
 
+  const [{ users: allUsers }, { permissions: allUsersPermissions }] =
+    await Promise.all([readUsers(), readPermissions()]);
+
+  allUsers.push(detailsUser);
+  allUsersPermissions.push(detailsPermissions);
+
   await Promise.all([
-    writeUser(detailsUser),
-    writePermissions(detailsPermissions),
+    writeUsers(allUsers),
+    writePermissions(allUsersPermissions),
   ]);
 
   const fullname = `${FirstName} ${LastName}`;
   await sendEmail(Email, fullname);
 
   return "Saved successfully!";
+};
+
+export const deleteUser = async (userId) => {
+  await userModel.findByIdAndDelete(userId);
+
+  const [{ users: allUsers }, { permissions: allUsersPermissions }] =
+    await Promise.all([readUsers(), readPermissions()]);
+
+  const updatedUsers = allUsers.filter((user) => user._id !== userId);
+
+  const updatedPermissionsUsers = allUsersPermissions.filter(
+    (user) => user._id !== userId
+  );
+
+  await Promise.all([
+    writeUsers(updatedUsers),
+    writePermissions(updatedPermissionsUsers),
+  ]);
+  return "Deleted successfully!!";
 };
