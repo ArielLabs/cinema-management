@@ -1,13 +1,12 @@
 import { useQuery } from "react-query";
-import axios from "axios";
-import env from "../../environment";
+import { axiosInstance } from "../../utils/http";
 import UsersTable from "../../components/UsersTable/UsersTable";
 import styles from "./UsersPage.module.css";
 
 const UsersPage = () => {
 
   const fetchUsers = async () => {
-    const { data } = await axios.get(`${env.apiURL}/users`);
+    const { data } = await axiosInstance.get("users");
     return data;
   };
 

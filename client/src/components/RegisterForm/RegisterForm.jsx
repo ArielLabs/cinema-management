@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { displayAlert } from "../../utils/alerts";
-import env from "../../environment";
-import axios from "axios";
+import { axiosInstance } from "../../utils/http";
 import useInput from "../../hooks/use-input";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
@@ -53,7 +52,7 @@ const RegisterForm = () => {
   };
 
   const sendUserRegister = async (details) => {
-    return await axios.put(`${env.apiURL}/auth/register`, details);
+    return await axiosInstance.put("auth/register", details);
   };
 
   const { mutate: registerUser } = useMutation({

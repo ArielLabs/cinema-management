@@ -2,8 +2,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { displayAlert } from "../../utils/alerts";
-import axios from "axios";
-import env from "../../environment";
+import { axiosInstance } from "../../utils/http";
 import useInput from "../../hooks/use-input";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import TextField from "@mui/material/TextField";
@@ -48,7 +47,7 @@ const LoginForm = () => {
   });
 
   const userLogin = (userDetails) => {
-    return axios.post(`${env.apiURL}/auth/login`, userDetails);
+    return axiosInstance.post("auth/login", userDetails);
   };
 
   const { mutate: userSignin } = useMutation({

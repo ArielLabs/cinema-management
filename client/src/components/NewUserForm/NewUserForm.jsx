@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { displayAlert } from "../../utils/alerts";
-import axios from "axios";
-import env from "../../environment";
+import { axiosInstance } from "../../utils/http";
 import useInput from "../../hooks/use-input";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -68,7 +67,7 @@ const NewUserForm = () => {
   };
 
   const sendNewUser = (newUserDetails) => {
-    return axios.post(`${env.apiURL}/users`, newUserDetails);
+    return axiosInstance.post("users", newUserDetails);
   };
 
   const { mutate: createNewUser } = useMutation({
