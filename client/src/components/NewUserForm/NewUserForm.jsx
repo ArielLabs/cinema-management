@@ -71,6 +71,7 @@ const NewUserForm = () => {
   };
 
   const { mutate: createNewUser } = useMutation({
+    mutationKey: "new-user",
     mutationFn: sendNewUser,
     onSuccess: (res) => {
       const { message } = res.data;

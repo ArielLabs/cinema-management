@@ -1,20 +1,30 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
-import styles from "./UsersTable.module.css";
+import ModalDelete from "../ModalDelete/ModalDelete";
 import PermissionChip from "../PermissionChip/PermissionChip";
 import SkeletonTable from "../SkeletonTable/SkeletonTable";
+import styles from "./UsersTable.module.css";
 
 const UsersTable = (prop) => {
   const { users, isLoading } = prop;
   const navigate = useNavigate();
-
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const newUserHandler = () => {
     navigate("/cinema/users/new");
+  };
+
+  const openDeleteModalHandler = (userId) => {
+    setSelectedUser(userId);
+  };
+
+  const closeModalHandler = () => {
+    setSelectedUser(null);
   };
 
   return (
@@ -53,7 +63,10 @@ const UsersTable = (prop) => {
             {users.message.map((user) => (
               <tr key={user._id} className={styles.userRow}>
                 <td style={{ width: "8%" }}>
-                  <IconButton sx={{ color: "#fa626e" }}>
+                  <IconButton
+                    sx={{ color: "#fa626e" }}
+                    onClick={() => openDeleteModalHandler(user._id)}
+                  >
                     <ClearIcon />
                   </IconButton>
                   <IconButton sx={{ color: "orange" }}>
@@ -105,6 +118,7 @@ const UsersTable = (prop) => {
         </table>
       )}
       {isLoading && <SkeletonTable />}
+      <ModalDelete userId={selectedUser} onClose={closeModalHandler} />
     </div>
   );
 };

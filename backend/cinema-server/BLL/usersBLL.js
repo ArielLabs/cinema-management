@@ -136,5 +136,5 @@ export const deleteUser = async (userId) => {
     writeUsers(updatedUsers),
     writePermissions(updatedPermissionsUsers),
   ]);
-  return "Deleted successfully!!";
+  return "Deleted successfully!";
 };
