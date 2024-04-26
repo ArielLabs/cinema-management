@@ -74,6 +74,21 @@ export const getUsers = async () => {
   return usersFullData;
 };
 
+export const getUser = async (id) => {
+  const { Email } = await userModel.findById(id);
+  const [{ users: allUsers }, { permissions: allUsersPermissions }] =
+    await Promise.all([readUsers(), readPermissions()]);
+
+  const userDetails = allUsers.find((user) => user._id === id);
+  const { Permissions } = allUsersPermissions.find((user) => user._id === id);
+
+  return {
+    ...userDetails,
+    Email,
+    Permissions,
+  };
+};
+
 export const createUser = async (newUser) => {
   const { FirstName, LastName, Email, SessionTimeOut, Permissions } = newUser;
   const tempPassword = await hash(uuidv4(), 10);
