@@ -82,10 +82,27 @@ export const getUser = async (id) => {
   const userDetails = allUsers.find((user) => user._id === id);
   const { Permissions } = allUsersPermissions.find((user) => user._id === id);
 
+  const permissionList = ["View", "Create", "Delete", "Edit"];
+
+  const moviesPermissions = permissionList.map((p) => {
+    return {
+      permission: p,
+      checked: Permissions.movies.includes(p),
+    };
+  });
+
+  const subscriptionsPermissions = permissionList.map((p) => {
+    return {
+      permission: p,
+      checked: Permissions.subscriptions.includes(p),
+    };
+  });
+
   return {
     ...userDetails,
     Email,
-    Permissions,
+    moviesPermissions,
+    subscriptionsPermissions,
   };
 };
 
@@ -133,6 +150,47 @@ export const createUser = async (newUser) => {
   await sendEmail(Email, fullname);
 
   return "Saved successfully!";
+};
+
+export const updateUser = async (userId, detailsUser) => {
+  const { Email } = await userModel.findById(userId);
+  if (Email !== detailsUser.Email) {
+    await userModel.findByIdAndUpdate(userId, { Email: detailsUser.Email });
+    //TBD: send email
+  }
+
+  const [{ users: allUsers }, { permissions: allUsersPermissions }] =
+    await Promise.all([readUsers(), readPermissions()]);
+
+  const userIdx = allUsers.findIndex((user) => user._id === userId);
+  const userPermissionsIdx = allUsersPermissions.findIndex(
+    (user) => user._id === userId
+  );
+
+  const { CreatedDate } = allUsers[userIdx];
+
+  const updatedUser = {
+    _id: userId,
+    FirstName: detailsUser.FirstName,
+    LastName: detailsUser.LastName,
+    SessionTimeOut: detailsUser.SessionTimeOut,
+    CreatedDate,
+  };
+
+  const updatedUserPermissions = {
+    _id: userId,
+    Permissions: detailsUser.Permissions,
+  };
+
+  allUsers[userIdx] = updatedUser;
+  allUsersPermissions[userPermissionsIdx] = updatedUserPermissions;
+
+  await Promise.all([
+    writeUsers(allUsers),
+    writePermissions(allUsersPermissions),
+  ]);
+
+  return "Updated successfully!";
 };
 
 export const deleteUser = async (userId) => {

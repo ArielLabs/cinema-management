@@ -23,7 +23,11 @@ const UsersTable = (prop) => {
     setSelectedUser(userId);
   };
 
-  const closeModalHandler = () => {
+  const editUserHandler = (userId) => {
+    navigate(`${userId}`);
+  };
+
+  const closeDeleteModalHandler = () => {
     setSelectedUser(null);
   };
 
@@ -69,7 +73,10 @@ const UsersTable = (prop) => {
                   >
                     <ClearIcon />
                   </IconButton>
-                  <IconButton sx={{ color: "orange" }}>
+                  <IconButton
+                    sx={{ color: "orange" }}
+                    onClick={() => editUserHandler(user._id)}
+                  >
                     <EditIcon />
                   </IconButton>
                 </td>
@@ -118,7 +125,7 @@ const UsersTable = (prop) => {
         </table>
       )}
       {isLoading && <SkeletonTable />}
-      <ModalDelete userId={selectedUser} onClose={closeModalHandler} />
+      <ModalDelete userId={selectedUser} onClose={closeDeleteModalHandler} />
     </div>
   );
 };

@@ -4,13 +4,8 @@ import Checkbox from "@mui/material/Checkbox";
 import styles from "./PermissionsList.module.css";
 
 const PermissionsList = (prop) => {
-  const { groupname, onTransferPermissions } = prop;
-  const [permissionsChecked, setPermissionsChecked] = useState([
-    { permission: "View", checked: false },
-    { permission: "Create", checked: false },
-    { permission: "Delete", checked: false },
-    { permission: "Edit", checked: false },
-  ]);
+  const { groupname, initialValue, onTransferPermissions } = prop;
+  const [permissionsChecked, setPermissionsChecked] = useState(initialValue);
 
   const viewChangedHandler = (event) => {
     const isChecked = event.target.checked;

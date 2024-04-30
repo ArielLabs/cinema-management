@@ -1,7 +1,7 @@
 export const personalInfo = {
   FirstName: "Ron",
   LastName: "Levi",
-  SessionTimeOut: 60,
+  SessionTimeOut: "60",
   CreatedDate: new Date().toLocaleString("en-US", {
     year: "numeric",
     month: "long",
