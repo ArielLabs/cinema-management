@@ -155,8 +155,9 @@ export const createUser = async (newUser) => {
 export const updateUser = async (userId, detailsUser) => {
   const { Email } = await userModel.findById(userId);
   if (Email !== detailsUser.Email) {
+    const fullname = `${detailsUser.FirstName} ${detaild.LastName}`;
     await userModel.findByIdAndUpdate(userId, { Email: detailsUser.Email });
-    //TBD: send email
+    await sendEmail(detailsUser.Email, fullname);
   }
 
   const [{ users: allUsers }, { permissions: allUsersPermissions }] =
