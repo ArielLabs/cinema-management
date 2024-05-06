@@ -10,8 +10,9 @@ import {
 const router = Router();
 
 router.get("/", async (req, res) => {
+  const { page } = req.query;
   try {
-    const result = await getMovies();
+    const result = await getMovies(page);
     res.status(200).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Error occured!" });

@@ -3,6 +3,7 @@ import styles from "./MovieCard.module.css";
 
 const MovieCard = (prop) => {
   const { movie } = prop;
+  const premieredDate = (movie.Premiered).split("T")[0];
   return (
     <div className={styles.movieCard}>
       <div className={styles.movieCardInner}>
@@ -24,7 +25,7 @@ const MovieCard = (prop) => {
               </p>
               <p>
                 <b>Premiered: </b>
-                {movie.Premiered}
+                {premieredDate}
               </p>
               <p>
                 <b>Age Restriction: </b>

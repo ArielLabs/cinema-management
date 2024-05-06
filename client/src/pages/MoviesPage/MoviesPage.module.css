@@ -3,13 +3,37 @@
     height: 100%;
     overflow-y: auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
 }
 
 .movieCardsContainer{
     display: flex;
     flex-wrap: wrap;
-    height: 100%;
     width: 100%;
+}
+
+.pages{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.numberPage{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: blueviolet;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
 }

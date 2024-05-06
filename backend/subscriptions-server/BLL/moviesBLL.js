@@ -13,7 +13,7 @@ export const insertMovies = async () => {
       Trailer: movie.trailer,
       Runtime: movie.runtime,
       Premiered: movie.premiered,
-      AgeRestriction: movie.ageRestriction
+      AgeRestriction: movie.ageRestriction,
     };
   });
 
@@ -25,8 +25,23 @@ export const hasMovies = async () => {
   return countMovies > 0;
 };
 
-export const getMovies = async () => {
-  return await movieModel.find({});
+export const getMovies = async (page) => {
+  const documentsPerPage = 8;
+  const pipelineCount = [{ $match: {} }, { $count: "totalMovies" }];
+
+  const pipelinePagination = [
+    { $match: {} },
+    { $skip: (page - 1) * documentsPerPage },
+    { $limit: documentsPerPage },
+  ];
+
+  const [resultCount, resultMovies] = await Promise.all([
+    movieModel.aggregate(pipelineCount),
+    movieModel.aggregate(pipelinePagination),
+  ]);
+
+  const pages = Math.ceil((resultCount[0].totalMovies / documentsPerPage));
+  return { numberPages: pages, movies: resultMovies };
 };
 
 export const getMovie = async (id) => {
