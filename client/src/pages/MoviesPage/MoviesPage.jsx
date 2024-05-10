@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../utils/http";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import styles from "./MoviesPage.module.css";
 
 const MoviesPage = () => {
+  const navigate = useNavigate();
   const [moviesList, setMoviesList] = useState({ totalPages: 0, movies: [] });
 
   useEffect(() => {
@@ -56,12 +66,60 @@ const MoviesPage = () => {
     fetchMoviesByPage(value);
   };
 
+  const newMovieHandler = () => {
+    navigate("new");
+  };
+
+  const searchInputChangedHandler = () => {};
+
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
 
   return (
     <div className={styles.moviesPage} id="movies-page">
+      <div className={styles.actionsContainer}>
+        <div className={styles.actions}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            sx={{
+              textTransform: "none",
+              backgroundColor: "#646cff",
+              "&:hover": {
+                backgroundColor: "#4a54fb",
+              },
+            }}
+            onClick={newMovieHandler}
+          >
+            New Movie
+          </Button>
+          <FormControl variant="outlined" size="small">
+            <InputLabel sx={{ color: "#646cff" }}>Search</InputLabel>
+            <OutlinedInput
+              label="Search"
+              autoComplete="off"
+              onChange={searchInputChangedHandler}
+              sx={{
+                color: "white",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#646cff",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#646cff",
+                },
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton edge="end" sx={{ color: "#646cff" }}>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </div>
+      </div>
       <div className={styles.movieCardsContainer}>
         {moviesList.movies.map((movie, index) => (
           <MovieCard key={index} movie={movie} />

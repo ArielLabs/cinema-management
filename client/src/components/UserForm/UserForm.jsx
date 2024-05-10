@@ -119,7 +119,7 @@ const UserForm = (prop) => {
     },
   });
 
-  const submitNewUserFormHandler = (event) => {
+  const submitUserFormHandler = (event) => {
     event.preventDefault();
 
     const dataUser = {
@@ -150,7 +150,7 @@ const UserForm = (prop) => {
   return (
     <form
       className={styles.userFormContainer}
-      onSubmit={submitNewUserFormHandler}
+      onSubmit={submitUserFormHandler}
     >
       <div className={styles.headerUserForm}>
         <span className={styles.titleForm}>{titleForm}</span>

@@ -8,6 +8,18 @@
     align-items: center;
 }
 
+.actionsContainer{
+    width: 100%;
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 15px;
+    margin: 1rem 0rem 0rem 2rem;
+}
+
 .movieCardsContainer{
     display: flex;
     flex-wrap: wrap;

@@ -4,6 +4,7 @@ import CinemaLayout from "./pages/CinemaLayout/CinemaLayout";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import MoviesPage from "./pages/MoviesPage/MoviesPage";
+import NewMoviePage from "./pages/NewMoviePage/NewMoviePage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 import NewUserPage from "./pages/NewUserPage/NewUserPage";
 import EditUserPage from "./pages/EditUserPage/EditUserPage";
@@ -25,6 +26,7 @@ const routerApp = createBrowserRouter([
     element: <CinemaLayout />,
     children: [
       { index: true, path: "movies", element: <MoviesPage /> },
+      { path: "movies/new", element: <NewMoviePage /> },
       { path: "users", element: <UsersPage /> },
       { path: "users/new", element: <NewUserPage /> },
       { path: "users/:id", element: <EditUserPage />, loader: fetchUser },

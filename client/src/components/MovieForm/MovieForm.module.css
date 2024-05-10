@@ -1,0 +1,63 @@
+.movieFormContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.movieFormCard{
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    background-color: #010229;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+}
+
+.headerMovieForm{
+    padding: 1rem 0rem 0.5rem 0rem;
+}
+
+.titleMovieForm{
+    color: rgb(216, 215, 215);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.movieFormFields{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.coupleFields{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1.25rem 0;
+    width: 80%;
+}
+
+.singleField{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 1.25rem 0;
+    width: 80%;
+}
+
+.actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
