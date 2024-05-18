@@ -5,7 +5,11 @@ const useInput = (initValue, validateFunc) => {
   const [isTouched, setIsTouched] = useState(false);
 
   const updateValue = (event) => {
-    setEnteredValue(event.target.value);
+    if(typeof event === 'object'){
+      setEnteredValue(event.target.value);
+    }else{
+      setEnteredValue(event);
+    }
   };
 
   const valueInputBlurHandler = () => {
