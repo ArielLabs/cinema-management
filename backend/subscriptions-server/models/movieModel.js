@@ -9,6 +9,7 @@ const movieSchema = new Schema(
     Trailer: String,
     Runtime: Number,
     Premiered: Date,
+    Language: String,
     AgeRestriction: String
   },
   {

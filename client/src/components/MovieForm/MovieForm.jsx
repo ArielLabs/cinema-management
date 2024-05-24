@@ -1,4 +1,8 @@
 import { genresOptions, restricationsOptions } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { axiosInstance } from "../../utils/http";
+import { displayAlert } from "../../utils/alerts";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -18,6 +22,8 @@ import {
 import styles from "./MovieForm.module.css";
 
 const MovieForm = () => {
+  const navigate = useNavigate();
+
   const {
     value: name,
     valueInputChangedHandler: nameInputChangedHandler,
@@ -67,8 +73,8 @@ const MovieForm = () => {
     validValue: validPremired,
     error: errorPremired,
   } = useInput("", (val) => {
-    const { $y: year, $M: month, $D: day }  = dayjs(val);
-    return (year && month && day);
+    const { $y: year, $M: month, $D: day } = dayjs(val);
+    return year && month && day;
   });
 
   const {
@@ -78,7 +84,9 @@ const MovieForm = () => {
     validValue: validLanguage,
     error: errorLanguage,
   } = useInput("", (val) => {
-    return val.trim().length > 0;
+    if (val.trim().length === 0) return false;
+    if (/[^a-zA-Z\s]/.test(val)) return false;
+    return true;
   });
 
   const {
@@ -113,9 +121,33 @@ const MovieForm = () => {
 
   const dateChangedHandler = (event) => {
     const { $y: year, $M: month, $D: day } = event;
-    const utcDate = Date.UTC(year, month, day);
-    premiredInputChangedHandler(utcDate);
+    // const utcDate = Date.UTC(year, month, day);
+    const date = `${year}-${month + 1}-${day}`;
+    premiredInputChangedHandler(date);
   };
+
+  const cancelHnadler = () => {
+    navigate("/cinema/movies");
+  };
+
+  const sendMovie = (movieDetails) => {
+    return axiosInstance.post("movies", movieDetails);
+  };
+
+  const { mutate: addMovie } = useMutation({
+    mutationKey: "add-movie",
+    mutationFn: sendMovie,
+    onSuccess: (res) => {
+      const { message } = res.data;
+      displayAlert("success", message).then(() => {
+        navigate("/cinema/movies");
+      });
+    },
+    onError: (err) => {
+      const { message } = err.response.data;
+      displayAlert("error", message);
+    },
+  });
 
   const submitMovieFormHandler = (event) => {
     event.preventDefault();
@@ -129,9 +161,9 @@ const MovieForm = () => {
       AgeRestriction: restriction,
       Runtime: runtime,
       Premiered: premired,
-      OriginalLanguage: language,
+      Language: language,
     };
-    console.log(movieDetails);
+    addMovie(movieDetails);
   };
 
   const MenuProps = {
@@ -526,7 +558,12 @@ const MovieForm = () => {
           >
             Save
           </Button>
-          <Button type="button" variant="outlined" sx={{ width: "6rem" }}>
+          <Button
+            type="button"
+            variant="outlined"
+            sx={{ width: "6rem" }}
+            onClick={cancelHnadler}
+          >
             Cancel
           </Button>
         </div>

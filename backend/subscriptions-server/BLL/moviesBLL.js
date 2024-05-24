@@ -13,6 +13,7 @@ export const insertMovies = async () => {
       Trailer: movie.trailer,
       Runtime: movie.runtime,
       Premiered: movie.premiered,
+      Language: movie.language,
       AgeRestriction: movie.ageRestriction,
     };
   });
@@ -51,6 +52,7 @@ export const getMovie = async (id) => {
 export const createMovie = async (movie) => {
   const newMovie = new movieModel(movie);
   await newMovie.save();
+  return "Saved successfully!";
 };
 
 export const updateMovie = async (id, movie) => {

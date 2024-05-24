@@ -35,8 +35,8 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const movie = req.body;
   try {
-    await createMovie(movie);
-    res.status(201).json({ message: "Created!" });
+    const result = await createMovie(movie);
+    res.status(201).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Error occured!" });
   }
