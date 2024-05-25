@@ -9,6 +9,11 @@ export const getMovies = async (page) => {
   return movies;
 };
 
+export const getMovie = async (id) => {
+  const { data } = await axios.get(`${SUBSCRIPTIONS_API}/movies/${id}`);
+  return data.message;
+};
+
 export const createMovie = async (movie) => {
   const { data } = await axios.post(`${SUBSCRIPTIONS_API}/movies`, movie);
   return data.message;

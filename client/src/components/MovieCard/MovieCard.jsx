@@ -1,9 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import styles from "./MovieCard.module.css";
 
 const MovieCard = (prop) => {
   const { movie } = prop;
-  const premieredDate = (movie.Premiered).split("T")[0];
+  const navigate = useNavigate();
+  const premieredDate = movie.Premiered.split("T")[0];
+
+  const moviePageHandler = () => {
+    navigate(`${movie._id}`);
+  };
+  
   return (
     <div className={styles.movieCard}>
       <div className={styles.movieCardInner}>
@@ -17,7 +24,7 @@ const MovieCard = (prop) => {
             <div className={styles.movieCardBackDetails}>
               <p>
                 <b>Genres: </b>
-                {(movie.Genres).join(", ")}
+                {movie.Genres.join(", ")}
               </p>
               <p>
                 <b>Runtime: </b>
@@ -33,7 +40,11 @@ const MovieCard = (prop) => {
               </p>
             </div>
             <div className={styles.movieBtn}>
-              <Button variant="contained" color="warning">
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={moviePageHandler}
+              >
                 Movie Page
               </Button>
             </div>

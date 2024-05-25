@@ -1,0 +1,13 @@
+.movieInfo{
+    width: 94%;
+    display: flex;
+    flex-direction: column;
+}
+
+.movieHeader{
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    color: orange;
+}
