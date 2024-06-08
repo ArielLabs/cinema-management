@@ -1,13 +1,136 @@
 .movieInfo{
-    width: 94%;
-    display: flex;
-    flex-direction: column;
+    width: 90%;
+    margin: 1rem auto;
 }
 
 .movieHeader{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.movieName{
     color: white;
     font-size: 2rem;
     font-weight: bold;
     margin: 1rem 0;
-    color: orange;
+}
+
+.movieBtnAction{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+.movieDetailsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+    margin: 2rem 0;
+    height: 420px;
+}
+
+.moreInfo{
+    width: 40%;
+}
+
+.titleMoreInfo{
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.moreInfoDetails{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.premieredSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    gap: 5px;
+}
+
+.premieredDetails{
+    display: flex;
+    flex-direction: column;
+}
+
+.runtimeSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: white;
+    gap: 5px;
+}
+
+.runtimeDetails{
+    display: flex;
+    flex-direction: column;
+}
+
+.plotSection{
+    color: white;
+}
+
+.listDetails{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+}
+
+.listItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    border-bottom: 1px solid #22265f;
+    height: 4rem;
+}
+
+.movieImage{
+    width: 30%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-sizing: border-box;
+    background-position: center;
+}
+
+.movieSubscription{
+    width: 30%;
+    height: 90%;
+    border: 2px solid white;
+    border-radius: 5px;
+    padding: 1rem 0;
+}
+
+.titleSubscriptions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: white;
+    margin-top: 0;
+    height: 12%;
+}
+
+.subscriptionsList{
+    height: 87%;
+    overflow-y: auto;
+}
+
+.subsItem{
+    color: #6495ed;
+    cursor: pointer;
+    margin-left: 1.5rem;
 }

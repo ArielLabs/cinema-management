@@ -21,7 +21,6 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const result = await getMovie(id);
     if (!result) {
