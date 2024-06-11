@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 import Button from "@mui/material/Button";
 import styles from "./MovieCard.module.css";
 
 const MovieCard = (prop) => {
   const { movie } = prop;
   const navigate = useNavigate();
-  const premieredDate = movie.Premiered.split("T")[0];
+  const { $y: year, $M: month, $D: day } = dayjs(movie.Premiered);
 
   const moviePageHandler = () => {
     navigate(`${movie._id}`);
@@ -32,7 +33,7 @@ const MovieCard = (prop) => {
               </p>
               <p>
                 <b>Premiered: </b>
-                {premieredDate}
+                {`${month+1}/${day}/${year}`}
               </p>
               <p>
                 <b>Age Restriction: </b>
