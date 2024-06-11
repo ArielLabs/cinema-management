@@ -26,7 +26,8 @@ export const hasMovies = async () => {
   return countMovies > 0;
 };
 
-export const getMovies = async (page) => {
+export const getMovies = async (page, search) => {
+  console.log(search);
   const documentsPerPage = 8;
   const pipelineCount = [{ $match: {} }, { $count: "totalMovies" }];
 

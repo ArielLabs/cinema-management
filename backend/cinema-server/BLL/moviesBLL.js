@@ -1,9 +1,9 @@
 import { SUBSCRIPTIONS_API } from "../environment.js";
 import axios from "axios";
 
-export const getMovies = async (page) => {
+export const getMovies = async (page, search) => {
   const response = await axios.get(`${SUBSCRIPTIONS_API}/movies`, {
-    params: { page },
+    params: { page, search },
   });
   const { message: movies } = response.data;
   return movies;

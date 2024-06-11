@@ -18,6 +18,7 @@ import styles from "./MoviesPage.module.css";
 const MoviesPage = () => {
   const navigate = useNavigate();
   const [moviesList, setMoviesList] = useState({ totalPages: 0, movies: [] });
+  const [searchMovies, setSearchMovies] = useState("");
 
   useEffect(() => {
     scrollToTop();
@@ -25,7 +26,9 @@ const MoviesPage = () => {
 
   const fetchMovies = async (page) => {
     const pageNumber = typeof page === "object" ? 1 : page;
-    return await axiosInstance.get("movies", { params: { page: pageNumber } });
+    return await axiosInstance.get("movies", {
+      params: { page: pageNumber, search: searchMovies },
+    });
   };
 
   const { isLoading } = useQuery({
@@ -70,7 +73,11 @@ const MoviesPage = () => {
     navigate("new");
   };
 
-  const searchInputChangedHandler = () => {};
+  const searchInputChangedHandler = (event) => {
+    if (event.key === "Enter") {
+      setSearchMovies(event.target.value);
+    }
+  };
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -99,7 +106,7 @@ const MoviesPage = () => {
             <OutlinedInput
               label="Search"
               autoComplete="off"
-              onChange={searchInputChangedHandler}
+              onKeyDown={searchInputChangedHandler}
               sx={{
                 color: "white",
                 "& .MuiOutlinedInput-notchedOutline": {
