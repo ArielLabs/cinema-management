@@ -13,22 +13,25 @@ import styles from "./UsersTable.module.css";
 const UsersTable = (prop) => {
   const { users, isLoading } = prop;
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const newUserHandler = () => {
     navigate("/cinema/users/new");
   };
 
-  const openDeleteModalHandler = (userId) => {
-    setSelectedUser(userId);
-  };
-
   const editUserHandler = (userId) => {
     navigate(`${userId}`);
   };
 
+  const openDeleteModalHandler = (userId) => {
+    setSelectedUser(userId);
+    setOpenModal((prevState) => !prevState);
+  };
+
   const closeDeleteModalHandler = () => {
     setSelectedUser(null);
+    setOpenModal((prevState) => !prevState);
   };
 
   return (
@@ -125,7 +128,12 @@ const UsersTable = (prop) => {
         </table>
       )}
       {isLoading && <SkeletonTable />}
-      <ModalDelete userId={selectedUser} onClose={closeDeleteModalHandler} />
+      <ModalDelete
+        onOpen={openModal}
+        itemId={selectedUser}
+        itemType={"users"}
+        onClose={closeDeleteModalHandler}
+      />
     </div>
   );
 };

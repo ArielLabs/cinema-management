@@ -4,6 +4,7 @@ import {
   getMovie,
   createMovie,
   updateMovie,
+  deleteMovie,
 } from "../BLL/moviesBLL.js";
 
 const router = Router();
@@ -43,6 +44,16 @@ router.put("/:id", async (req, res) => {
   const movie = req.body;
   try {
     const result = await updateMovie(id, movie);
+    res.status(200).json({ message: result });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await deleteMovie(id);
     res.status(200).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });

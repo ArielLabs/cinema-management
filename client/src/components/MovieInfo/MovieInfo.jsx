@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player/youtube";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -6,10 +7,12 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PhotoCameraFrontIcon from "@mui/icons-material/PhotoCameraFront";
+import ModalDelete from "../ModalDelete/ModalDelete";
 import styles from "./MovieInfo.module.css";
 
 const MovieInfo = (prop) => {
   const { movie } = prop;
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const subs = [
     { id: 1, name: "Gil Milo", date: "11/14/2023" },
@@ -33,6 +36,15 @@ const MovieInfo = (prop) => {
     navigate(`/cinema/movies/${movie._id}/edit`);
   };
 
+  const openDeleteModalHandler = () => {
+    setOpenModal((prevState) => !prevState);
+  };
+
+  const closeDeleteModalHandler = () => {
+    setOpenModal((prevState) => !prevState);
+    navigate("/cinema/movies");
+  };
+
   return (
     <div className={styles.movieInfo}>
       <div className={styles.movieHeader}>
@@ -53,6 +65,7 @@ const MovieInfo = (prop) => {
           <Button
             variant="contained"
             endIcon={<DeleteIcon />}
+            onClick={openDeleteModalHandler}
             sx={{
               width: "120px",
               backgroundColor: "#f44c4c",
@@ -137,6 +150,12 @@ const MovieInfo = (prop) => {
           </div>
         </div>
       </div>
+      <ModalDelete
+        onOpen={openModal}
+        itemId={movie._id}
+        itemType={"movies"}
+        onClose={closeDeleteModalHandler}
+      />
     </div>
   );
 };

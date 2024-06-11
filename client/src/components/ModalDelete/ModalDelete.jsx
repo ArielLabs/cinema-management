@@ -8,21 +8,23 @@ import Modal from "@mui/material/Modal";
 import styles from "./ModalDelete.module.css";
 
 const ModalDelete = (prop) => {
-  const { userId, onClose } = prop;
+  const { onOpen, itemId, itemType, onClose } = prop;
   const queryClient = useQueryClient();
 
-  const submitDeleteUser = async () => {
-    return await axiosInstance.delete(`users/${userId}`);
+  const submitDelete = async () => {
+    return await axiosInstance.delete(`${itemType}/${itemId}`);
   };
 
   const { mutate: deleteUser } = useMutation({
-    mutationKey: "delete-user",
-    mutationFn: submitDeleteUser,
+    mutationKey: "delete-item",
+    mutationFn: submitDelete,
     onSuccess: (res) => {
       onClose();
       const { message } = res.data;
       displayAlert("success", message).then(() => {
-        queryClient.invalidateQueries("fetch-users");
+        if (itemType === "users") {
+          queryClient.invalidateQueries("fetch-users");
+        }
       });
     },
     onError: (err) => {
@@ -40,14 +42,23 @@ const ModalDelete = (prop) => {
     onClose();
   };
 
+  let item = "";
+  if (itemType === "users") {
+    item = "user";
+  } else if (itemType === "movies") {
+    item = "movie";
+  } else {
+    item = "member";
+  }
+
   return (
-    <Modal open={userId !== null}>
+    <Modal open={onOpen}>
       <Box className={styles.container}>
         <Typography variant="h6" component="h2">
-          Delete User
+          {`Delete ${item.charAt(0).toUpperCase() + item.slice(1)}`}
         </Typography>
         <Typography sx={{ mt: 2 }}>
-          Are you sure to delete this user from the system?
+          {`Are you sure to delete this ${item} from the system?`}
         </Typography>
         <div className={styles.actionsBtn}>
           <Button variant="contained" onClick={deleteHandler}>
