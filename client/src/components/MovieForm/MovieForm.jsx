@@ -21,7 +21,8 @@ import {
 } from "@mui/material";
 import styles from "./MovieForm.module.css";
 
-const MovieForm = () => {
+const MovieForm = (prop) => {
+  const { mode, movie } = prop;
   const navigate = useNavigate();
 
   const {
@@ -30,7 +31,7 @@ const MovieForm = () => {
     valueInputBlurHandler: nameInputBlurHandler,
     validValue: validName,
     error: errorName,
-  } = useInput("", (val) => {
+  } = useInput(movie.Name, (val) => {
     return val.trim().length > 0;
   });
 
@@ -40,7 +41,7 @@ const MovieForm = () => {
     valueInputBlurHandler: runtimeInputBlurHandler,
     validValue: validRuntime,
     error: errorRuntime,
-  } = useInput("", (val) => {
+  } = useInput(String(movie.Runtime), (val) => {
     if (val.trim().length === 0) return false;
     if (!/^\d+$/.test(val)) return false;
     return true;
@@ -52,7 +53,7 @@ const MovieForm = () => {
     valueInputBlurHandler: restrictionInputBlurHandler,
     validValue: validRestriction,
     error: errorRestriction,
-  } = useInput("", (val) => {
+  } = useInput(movie.AgeRestriction, (val) => {
     return val.trim().length > 0;
   });
 
@@ -62,7 +63,7 @@ const MovieForm = () => {
     valueInputBlurHandler: genresInputBlurHandler,
     validValue: validGenres,
     error: errorGenres,
-  } = useInput([], (val) => {
+  } = useInput(movie.Genres, (val) => {
     return val.length > 0;
   });
 
@@ -72,7 +73,7 @@ const MovieForm = () => {
     valueInputBlurHandler: premiredInputBlurHandler,
     validValue: validPremired,
     error: errorPremired,
-  } = useInput("", (val) => {
+  } = useInput(movie.Premiered, (val) => {
     const { $y: year, $M: month, $D: day } = dayjs(val);
     return year && month && day;
   });
@@ -83,7 +84,7 @@ const MovieForm = () => {
     valueInputBlurHandler: languageInputBlurHandler,
     validValue: validLanguage,
     error: errorLanguage,
-  } = useInput("", (val) => {
+  } = useInput(movie.Language, (val) => {
     if (val.trim().length === 0) return false;
     if (/[^a-zA-Z\s]/.test(val)) return false;
     return true;
@@ -95,7 +96,7 @@ const MovieForm = () => {
     valueInputBlurHandler: imageInputBlurHandler,
     validValue: validImage,
     error: errorImage,
-  } = useInput("", (val) => {
+  } = useInput(movie.Image, (val) => {
     return val.trim().length > 0;
   });
 
@@ -105,7 +106,7 @@ const MovieForm = () => {
     valueInputBlurHandler: trailerInputBlurHandler,
     validValue: validTrailer,
     error: errorTrailer,
-  } = useInput("", (val) => {
+  } = useInput(movie.Trailer, (val) => {
     return val.trim().length > 0;
   });
 
@@ -115,13 +116,12 @@ const MovieForm = () => {
     valueInputBlurHandler: plotInputBlurHandler,
     validValue: validPlot,
     error: errorPlot,
-  } = useInput("", (val) => {
+  } = useInput(movie.Plot, (val) => {
     return val.trim().length > 0;
   });
 
   const dateChangedHandler = (event) => {
     const { $y: year, $M: month, $D: day } = event;
-    // const utcDate = Date.UTC(year, month, day);
     const date = `${year}-${month + 1}-${day}`;
     premiredInputChangedHandler(date);
   };
@@ -131,11 +131,29 @@ const MovieForm = () => {
   };
 
   const sendMovie = (movieDetails) => {
-    return axiosInstance.post("movies", movieDetails);
+    if (mode === "create") {
+      return axiosInstance.post("movies", movieDetails);
+    }
+    return axiosInstance.put(`movies/${movie._id}`, movieDetails);
   };
 
   const { mutate: addMovie } = useMutation({
     mutationKey: "add-movie",
+    mutationFn: sendMovie,
+    onSuccess: (res) => {
+      const { message } = res.data;
+      displayAlert("success", message).then(() => {
+        navigate("/cinema/movies");
+      });
+    },
+    onError: (err) => {
+      const { message } = err.response.data;
+      displayAlert("error", message);
+    },
+  });
+
+  const { mutate: updateMovie } = useMutation({
+    mutationKey: "update-movie",
     mutationFn: sendMovie,
     onSuccess: (res) => {
       const { message } = res.data;
@@ -163,7 +181,11 @@ const MovieForm = () => {
       Premiered: premired,
       Language: language,
     };
-    addMovie(movieDetails);
+    if (mode === "create") {
+      addMovie(movieDetails);
+    } else {
+      updateMovie(movieDetails);
+    }
   };
 
   const MenuProps = {
@@ -186,11 +208,15 @@ const MovieForm = () => {
     validTrailer &&
     validPlot;
 
+  const titleForm =
+    mode === "create" ? "New Movie" : `Edit Movie - ${movie.Name}`;
+  const buttonForm = mode === "create" ? "Save" : "Update";
+
   return (
     <div className={styles.movieFormContainer}>
       <form className={styles.movieFormCard} onSubmit={submitMovieFormHandler}>
         <div className={styles.headerMovieForm}>
-          <span className={styles.titleMovieForm}>New Movie</span>
+          <span className={styles.titleMovieForm}>{titleForm}</span>
         </div>
         <div className={styles.movieFormFields}>
           <div className={styles.coupleFields}>
@@ -200,6 +226,7 @@ const MovieForm = () => {
                 type="text"
                 variant="standard"
                 autoComplete="off"
+                value={name}
                 onChange={nameInputChangedHandler}
                 onBlur={nameInputBlurHandler}
                 error={errorName}
@@ -232,6 +259,7 @@ const MovieForm = () => {
                 type="text"
                 variant="standard"
                 autoComplete="off"
+                value={runtime}
                 onChange={runtimeInputChangedHandler}
                 onBlur={runtimeInputBlurHandler}
                 error={errorRuntime}
@@ -285,7 +313,7 @@ const MovieForm = () => {
               >
                 <InputLabel>Age Restriction</InputLabel>
                 <Select
-                  defaultValue={""}
+                  value={restriction}
                   onChange={restrictionInputChangedHandler}
                   onBlur={restrictionInputBlurHandler}
                   MenuProps={MenuProps}
@@ -365,6 +393,7 @@ const MovieForm = () => {
                 >
                   <DatePicker
                     label="Premired"
+                    value={dayjs(premired)}
                     onChange={dateChangedHandler}
                     onOpen={premiredInputBlurHandler}
                     slotProps={{
@@ -409,6 +438,7 @@ const MovieForm = () => {
                 type="text"
                 variant="standard"
                 autoComplete="off"
+                value={language}
                 onChange={languageInputChangedHandler}
                 onBlur={languageInputBlurHandler}
                 error={errorLanguage}
@@ -443,6 +473,7 @@ const MovieForm = () => {
                 type="text"
                 variant="standard"
                 autoComplete="off"
+                value={image}
                 onChange={imageInputChangedHandler}
                 onBlur={imageInputBlurHandler}
                 error={errorImage}
@@ -477,6 +508,7 @@ const MovieForm = () => {
                 type="text"
                 variant="standard"
                 autoComplete="off"
+                value={trailer}
                 onChange={trailerInputChangedHandler}
                 onBlur={trailerInputBlurHandler}
                 error={errorTrailer}
@@ -513,6 +545,7 @@ const MovieForm = () => {
                 multiline={true}
                 rows={4}
                 autoComplete="off"
+                value={plot}
                 onChange={plotInputChangedHandler}
                 onBlur={plotInputBlurHandler}
                 error={errorPlot}
@@ -556,7 +589,7 @@ const MovieForm = () => {
               },
             }}
           >
-            Save
+            {buttonForm}
           </Button>
           <Button
             type="button"

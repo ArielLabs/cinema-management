@@ -18,3 +18,8 @@ export const createMovie = async (movie) => {
   const { data } = await axios.post(`${SUBSCRIPTIONS_API}/movies`, movie);
   return data.message;
 };
+
+export const updateMovie = async (id, movie) => {
+  const { data } = await axios.put(`${SUBSCRIPTIONS_API}/movies/${id}`, movie);
+  return data.message;
+};

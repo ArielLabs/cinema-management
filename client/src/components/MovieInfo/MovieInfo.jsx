@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player/youtube";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -9,6 +10,7 @@ import styles from "./MovieInfo.module.css";
 
 const MovieInfo = (prop) => {
   const { movie } = prop;
+  const navigate = useNavigate();
   const subs = [
     { id: 1, name: "Gil Milo", date: "11/14/2023" },
     { id: 2, name: "Dana Varod", date: "12/19/2023" },
@@ -27,6 +29,10 @@ const MovieInfo = (prop) => {
     });
   };
 
+  const editMovieHandler = () => {
+    navigate(`/cinema/movies/${movie._id}/edit`);
+  };
+
   return (
     <div className={styles.movieInfo}>
       <div className={styles.movieHeader}>
@@ -35,6 +41,7 @@ const MovieInfo = (prop) => {
           <Button
             variant="contained"
             endIcon={<EditIcon />}
+            onClick={editMovieHandler}
             sx={{
               width: "120px",
               backgroundColor: "orange",
@@ -68,7 +75,7 @@ const MovieInfo = (prop) => {
           style={{ backgroundImage: `url(${movie.Image})` }}
         ></div>
         <div className={styles.moreInfo}>
-          <div style={{marginBottom: "0.75rem"}}>
+          <div style={{ marginBottom: "0.75rem" }}>
             <span className={styles.titleMoreInfo}>
               More Information About {movie.Name}
             </span>

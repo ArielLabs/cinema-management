@@ -8,6 +8,7 @@ import MoviePage from "./pages/MoviePage/MoviePage";
 import NewMoviePage from "./pages/NewMoviePage/NewMoviePage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 import NewUserPage from "./pages/NewUserPage/NewUserPage";
+import EditMoviePage from "./pages/EditMoviePage/EditMoviePage";
 import EditUserPage from "./pages/EditUserPage/EditUserPage";
 import SubscriptionsPage from "./pages/SubscriptionsPage/SubscriptionsPage";
 import { fetchMovie, fetchUser } from "./utils/loaders";
@@ -29,6 +30,7 @@ const routerApp = createBrowserRouter([
       { index: true, path: "movies", element: <MoviesPage /> },
       { path: "movies/new", element: <NewMoviePage /> },
       { path: "movies/:id", element: <MoviePage />, loader: fetchMovie },
+      { path: "movies/:id/edit", element: <EditMoviePage />, loader: fetchMovie },
       { path: "users", element: <UsersPage /> },
       { path: "users/new", element: <NewUserPage /> },
       { path: "users/:id", element: <EditUserPage />, loader: fetchUser },

@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getMovies, getMovie, createMovie } from "../BLL/moviesBLL.js";
+import {
+  getMovies,
+  getMovie,
+  createMovie,
+  updateMovie,
+} from "../BLL/moviesBLL.js";
 
 const router = Router();
 
@@ -28,6 +33,17 @@ router.post("/", async (req, res) => {
   try {
     const result = await createMovie(movie);
     res.status(201).json({ message: result });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const movie = req.body;
+  try {
+    const result = await updateMovie(id, movie);
+    res.status(200).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
