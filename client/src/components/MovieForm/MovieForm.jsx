@@ -127,7 +127,11 @@ const MovieForm = (prop) => {
   };
 
   const cancelHnadler = () => {
-    navigate("/cinema/movies");
+    if (mode === "create") {
+      navigate("/cinema/movies");
+    } else {
+      navigate(`/cinema/movies/${movie._id}`);
+    }
   };
 
   const sendMovie = (movieDetails) => {
