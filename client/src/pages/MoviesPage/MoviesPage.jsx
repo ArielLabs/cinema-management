@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useQuery, useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { searchActions } from "../../store/search";
 import { axiosInstance } from "../../utils/http";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
-import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
+import {
+  Pagination,
+  Stack,
+  Button,
+  IconButton,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+} from "@mui/material";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import styles from "./MoviesPage.module.css";
 
 const MoviesPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { page: currentPage } = useSelector((state) => state.search);
   const [moviesList, setMoviesList] = useState({ totalPages: 0, movies: [] });
   const [searchMovies, setSearchMovies] = useState("");
 
@@ -25,7 +31,7 @@ const MoviesPage = () => {
   }, [moviesList]);
 
   const fetchMovies = async (page) => {
-    const pageNumber = typeof page === "object" ? 1 : page;
+    const pageNumber = typeof page === "object" ? currentPage : page;
     return await axiosInstance.get("movies", {
       params: { page: pageNumber, search: searchMovies },
     });
@@ -66,6 +72,7 @@ const MoviesPage = () => {
 
   const paginationChangedHandler = (event, value) => {
     event.stopPropagation();
+    dispatch(searchActions.setSearch({ characters: "", page: value }));
     fetchMoviesByPage(value);
   };
 
@@ -135,6 +142,7 @@ const MoviesPage = () => {
       <div className={styles.pages}>
         <Stack spacing={2}>
           <Pagination
+            defaultPage={currentPage}
             count={moviesList.totalPages}
             color="secondary"
             onChange={paginationChangedHandler}
