@@ -22,18 +22,20 @@ import styles from "./MoviesPage.module.css";
 const MoviesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { page: currentPage } = useSelector((state) => state.search);
+  const { page: currentPage, chars: currentChars } = useSelector((state) => state.search);
   const [moviesList, setMoviesList] = useState({ totalPages: 0, movies: [] });
-  const [searchMovies, setSearchMovies] = useState("");
+  const [textSearch, setTextSearch] = useState(currentChars);
 
   useEffect(() => {
     scrollToTop();
   }, [moviesList]);
 
-  const fetchMovies = async (page) => {
-    const pageNumber = typeof page === "object" ? currentPage : page;
+  const fetchMovies = async (searchDetails) => {
+    const { page, chars } = searchDetails;
+    const pageNumber = page ? page : currentPage;
+    const filterByChars = chars ? chars : currentChars;
     return await axiosInstance.get("movies", {
-      params: { page: pageNumber, search: searchMovies },
+      params: { page: pageNumber, search: filterByChars },
     });
   };
 
@@ -49,7 +51,7 @@ const MoviesPage = () => {
     },
   });
 
-  const { mutate: fetchMoviesByPage } = useMutation({
+  const { mutate: fetchMoviesByEvent } = useMutation({
     mutationFn: fetchMovies,
     onSuccess: (res) => {
       const { message } = res.data;
@@ -72,8 +74,8 @@ const MoviesPage = () => {
 
   const paginationChangedHandler = (event, value) => {
     event.stopPropagation();
-    dispatch(searchActions.setSearch({ characters: "", page: value }));
-    fetchMoviesByPage(value);
+    dispatch(searchActions.setSearch({ chars: currentChars, page: value }));
+    fetchMoviesByEvent({ page: value });
   };
 
   const newMovieHandler = () => {
@@ -81,8 +83,14 @@ const MoviesPage = () => {
   };
 
   const searchInputChangedHandler = (event) => {
+    setTextSearch(event.target.value);
+  };
+
+  const searchInputKeyDownHandler = (event) => {
     if (event.key === "Enter") {
-      setSearchMovies(event.target.value);
+      const searchInput = event.target.value;
+      dispatch(searchActions.setSearch({ page: 1, chars: searchInput }));
+      fetchMoviesByEvent({ page: 1, chars: searchInput });
     }
   };
 
@@ -113,7 +121,9 @@ const MoviesPage = () => {
             <OutlinedInput
               label="Search"
               autoComplete="off"
-              onKeyDown={searchInputChangedHandler}
+              value={textSearch}
+              onChange={searchInputChangedHandler}
+              onKeyDown={searchInputKeyDownHandler}
               sx={{
                 color: "white",
                 "& .MuiOutlinedInput-notchedOutline": {
@@ -142,7 +152,7 @@ const MoviesPage = () => {
       <div className={styles.pages}>
         <Stack spacing={2}>
           <Pagination
-            defaultPage={currentPage}
+            page={currentPage}
             count={moviesList.totalPages}
             color="secondary"
             onChange={paginationChangedHandler}

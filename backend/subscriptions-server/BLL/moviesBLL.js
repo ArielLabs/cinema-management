@@ -27,12 +27,16 @@ export const hasMovies = async () => {
 };
 
 export const getMovies = async (page, search) => {
-  console.log(search);
   const documentsPerPage = 8;
-  const pipelineCount = [{ $match: {} }, { $count: "totalMovies" }];
+
+  const matchCondition = search
+    ? { Name: { $regex: search, $options: "i" } }
+    : {};
+
+  const pipelineCount = [{ $match: matchCondition }, { $count: "totalMovies" }];
 
   const pipelinePagination = [
-    { $match: {} },
+    { $match: matchCondition },
     { $skip: (page - 1) * documentsPerPage },
     { $limit: documentsPerPage },
   ];
@@ -42,7 +46,7 @@ export const getMovies = async (page, search) => {
     movieModel.aggregate(pipelinePagination),
   ]);
 
-  const pages = Math.ceil((resultCount[0].totalMovies / documentsPerPage));
+  const pages = Math.ceil(resultCount[0].totalMovies / documentsPerPage);
   return { numberPages: pages, movies: resultMovies };
 };
 
