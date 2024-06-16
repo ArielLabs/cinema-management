@@ -1,0 +1,130 @@
+.subscriptionsTableContainer{
+    width: 94%;
+    height: 82%;
+    margin-top: 1rem;
+}
+
+.subscriptionsTable{
+    width: 100%;
+    max-height: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+}
+
+.subscriptionsTable thead{
+    height: 10%;
+    width: calc(100% -1em);
+}
+
+.scrollableTbody{
+    display: block;
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.subscriptionsTable thead, .subscriptionsTable tbody tr{
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table {
+    border-collapse: collapse;
+    text-indent: initial;
+    border-spacing: 0px;
+}
+
+th{
+    color: #ccc;
+    background-color: #010229;
+}
+
+th:first-child{
+    border-radius: 10px 0 0 0;
+}
+
+th:last-child{
+    border-radius: 0 10px 0 0;
+}
+
+tr:last-child{
+    border-bottom: none;
+}
+
+.titlesColumns{
+    color: white;
+    height: 4rem;
+}
+
+.subscriptionRow{
+    height: 5.25rem;
+    background-color: #363651;
+    border-bottom: 1px solid white;
+    flex: 1;
+}
+
+.sectionNameEmail{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+}
+
+.userAvatar{
+    width: 40px;
+    height: 40px;
+    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
+.contentNameEmail{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.fullname{
+    color: white;
+    font-weight: 500;
+}
+
+.email{
+    color: #e1dfdf;
+}
+
+.citySection{
+    text-align: center;
+    color: #e1dfdf;
+    font-size: 14px;
+}
+
+.phoneSection{
+    text-align: center;
+    color: #e1dfdf;
+    font-size: 14px;
+}
+
+.moviesSection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subscribeSection{
+    text-align: center;
+    color: #e1dfdf;
+    font-size: 14px;
+}

@@ -1,9 +1,12 @@
+import SubscriptionsTable from "../../components/SubscriptionsTable/SubscriptionsTable";
 import styles from "./SubscriptionsPage.module.css";
 
 const SubscriptionsPage = () => {
-    return(
-        <div style={{color: "white"}}>Subscriptions Page</div>
-    );
+  return (
+    <div className={styles.SubscriptionsPage}>
+      <SubscriptionsTable />
+    </div>
+  );
 };
 
 export default SubscriptionsPage;
