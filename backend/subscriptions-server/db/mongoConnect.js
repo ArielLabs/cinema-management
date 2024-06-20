@@ -2,6 +2,7 @@ import { connect } from "mongoose";
 import { insertMembers, hasMembers } from "../BLL/membersBLL.js";
 import { insertMovies, hasMovies } from "../BLL/moviesBLL.js";
 import { DB_HOST, DB_PORT, DB_NAME } from "../environments.js";
+import { insertScreenings } from "../services/schedule.js";
 
 export const dbConnect = async () => {
   try {
@@ -13,6 +14,7 @@ export const dbConnect = async () => {
     }
     if (!hasData[1]) {
       await insertMovies();
+      await insertScreenings();
     }
     console.log(
       "The data of the members and the movies are in a subscriptions database"
