@@ -49,13 +49,9 @@ const SubscriptionsTable = () => {
   const openDeleteModalHandler = () => {};
   const editMemberHandler = () => {};
 
-  const newSubscribeToMovieHandler = () => {
+  const toggleSubscribeToMovieHandler = () => {
     setOpenModalSubscribe((prevState) => !prevState);
   };
-
-  const closeSubscribeModalHandler = () => {
-    setOpenModalSubscribe((prevState) => !prevState);
-  }
 
   return (
     <div className={styles.subscriptionsTableContainer}>
@@ -87,7 +83,7 @@ const SubscriptionsTable = () => {
             backgroundColor: "#8647f9",
           },
         }}
-        onClick={newSubscribeToMovieHandler}
+        onClick={toggleSubscribeToMovieHandler}
       >
         Subscribe to Movie
       </Button>
@@ -146,7 +142,7 @@ const SubscriptionsTable = () => {
       </table>
       <MovieSubscribe
         onOpen={openModalSubscribe}
-        onClose={closeSubscribeModalHandler}
+        onClose={toggleSubscribeToMovieHandler}
       />
     </div>
   );
