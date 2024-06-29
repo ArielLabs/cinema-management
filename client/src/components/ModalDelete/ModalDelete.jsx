@@ -1,10 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 import { axiosInstance } from "../../utils/http";
 import { displayAlert } from "../../utils/alerts";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
+import { Box, Typography, Button, Modal } from "@mui/material";
 import styles from "./ModalDelete.module.css";
 
 const ModalDelete = (prop) => {

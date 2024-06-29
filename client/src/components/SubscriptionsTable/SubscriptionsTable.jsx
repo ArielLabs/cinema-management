@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Button, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import SlideshowIcon from '@mui/icons-material/Slideshow';
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import styles from "./SubscriptionsTable.module.css";
 import SelectList from "../SelectList/SelectList";
+import MovieSubscribe from "../MovieSubscribe/MovieSubscribe";
 
 const SubscriptionsTable = () => {
+  const [openModalSubscribe, setOpenModalSubscribe] = useState(false);
   const members = [
     {
       _id: "1",
@@ -44,6 +48,15 @@ const SubscriptionsTable = () => {
   const newMemberHandler = () => {};
   const openDeleteModalHandler = () => {};
   const editMemberHandler = () => {};
+
+  const newSubscribeToMovieHandler = () => {
+    setOpenModalSubscribe((prevState) => !prevState);
+  };
+
+  const closeSubscribeModalHandler = () => {
+    setOpenModalSubscribe((prevState) => !prevState);
+  }
+
   return (
     <div className={styles.subscriptionsTableContainer}>
       <Button
@@ -62,6 +75,22 @@ const SubscriptionsTable = () => {
       >
         New Member
       </Button>
+      <Button
+        variant="contained"
+        startIcon={<SlideshowIcon />}
+        sx={{
+          marginBottom: "1rem",
+          marginRight: "1rem",
+          textTransform: "none",
+          backgroundColor: "#9b64ff",
+          "&:hover": {
+            backgroundColor: "#8647f9",
+          },
+        }}
+        onClick={newSubscribeToMovieHandler}
+      >
+        Subscribe to Movie
+      </Button>
       <table className={styles.subscriptionsTable}>
         <thead>
           <tr className={styles.titlesColumns}>
@@ -69,10 +98,9 @@ const SubscriptionsTable = () => {
             <th style={{ width: "25%", textAlign: "left" }}>
               <div style={{ marginLeft: "1rem" }}>Name & Email</div>
             </th>
-            <th style={{ width: "12%" }}>City</th>
-            <th style={{ width: "12%" }}>Phone</th>
-            <th style={{ width: "27%" }}>Movies Watched</th>
-            <th style={{ width: "16%" }}>Subscribe</th>
+            <th style={{ width: "15%" }}>City</th>
+            <th style={{ width: "15%" }}>Phone</th>
+            <th style={{ width: "37%" }}>Movies Watched</th>
           </tr>
         </thead>
         <tbody className={styles.scrollableTbody}>
@@ -101,24 +129,25 @@ const SubscriptionsTable = () => {
                   </div>
                 </div>
               </td>
-              <td style={{ width: "12%" }} className={styles.citySection}>
+              <td style={{ width: "15%" }} className={styles.citySection}>
                 {member.City}
               </td>
-              <td style={{ width: "12%" }} className={styles.phoneSection}>
+              <td style={{ width: "15%" }} className={styles.phoneSection}>
                 {member.Phone}
               </td>
-              <td style={{ width: "27%" }}>
+              <td style={{ width: "37%" }}>
                 <div className={styles.moviesSection}>
                   <SelectList label={"Movies"} options={member.Movies} />
                 </div>
-              </td>
-              <td style={{ width: "16%" }} className={styles.subscribeSection}>
-                <span>Subscribe</span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <MovieSubscribe
+        onOpen={openModalSubscribe}
+        onClose={closeSubscribeModalHandler}
+      />
     </div>
   );
 };
