@@ -1,15 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
-import styles from "./SubscriptionsTable.module.css";
 import SelectList from "../SelectList/SelectList";
 import MovieSubscribe from "../MovieSubscribe/MovieSubscribe";
+import styles from "./SubscriptionsTable.module.css";
 
 const SubscriptionsTable = () => {
   const [openModalSubscribe, setOpenModalSubscribe] = useState(false);
+  const navigate = useNavigate();
   const members = [
     {
       _id: "1",
@@ -45,7 +47,11 @@ const SubscriptionsTable = () => {
       ],
     },
   ];
-  const newMemberHandler = () => {};
+  
+  const newMemberHandler = () => {
+    navigate("new");
+  };
+
   const openDeleteModalHandler = () => {};
   const editMemberHandler = () => {};
 

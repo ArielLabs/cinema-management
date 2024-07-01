@@ -26,3 +26,22 @@ export const restricationsOptions = [
   "8+",
   "No limit",
 ];
+
+export const movieDetails = {
+  Name: "",
+  Runtime: "",
+  AgeRestriction: "",
+  Genres: [],
+  Premiered: "",
+  Language: "",
+  Image: "",
+  Trailer: "",
+  Plot: "",
+};
+
+export const memberDetails = {
+  Name: "",
+  Email: "",
+  City: "",
+  Phone: "",
+};

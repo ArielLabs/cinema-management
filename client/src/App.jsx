@@ -11,8 +11,8 @@ import NewUserPage from "./pages/NewUserPage/NewUserPage";
 import EditMoviePage from "./pages/EditMoviePage/EditMoviePage";
 import EditUserPage from "./pages/EditUserPage/EditUserPage";
 import SubscriptionsPage from "./pages/SubscriptionsPage/SubscriptionsPage";
+import NewMemberPage from "./pages/NewMemberPage/NewMemberPage";
 import { fetchMovie, fetchUser } from "./utils/loaders";
-
 
 const routerApp = createBrowserRouter([
   {
@@ -34,10 +34,11 @@ const routerApp = createBrowserRouter([
       { path: "users", element: <UsersPage /> },
       { path: "users/new", element: <NewUserPage /> },
       { path: "users/:id", element: <EditUserPage />, loader: fetchUser },
-      { path: "subscriptions", element: <SubscriptionsPage />},
+      { path: "subscriptions", element: <SubscriptionsPage /> },
+      { path: "subscriptions/new", element: <NewMemberPage /> },
     ],
   },
-])
+]);
 
 function App() {
   return <RouterProvider router={routerApp} />;

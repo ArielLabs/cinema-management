@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { displayAlert } from "../../utils/alerts";
 import { axiosInstance } from "../../utils/http";
 import useInput from "../../hooks/use-input";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { TextField, Button } from "@mui/material";
 import PermissionsList from "../PermissionsList/PermissionsList";
 import styles from "./UserForm.module.css";
 
