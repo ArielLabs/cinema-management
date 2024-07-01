@@ -10,7 +10,7 @@ export const insertMembers = async () => {
       Name: member.name,
       Email: member.email,
       City: member.address.city,
-      Phone: getRandomPhone()
+      Phone: getRandomPhone(),
     };
   });
 
@@ -23,7 +23,26 @@ export const hasMembers = async () => {
 };
 
 export const getMembers = async () => {
-  return await memberModel.find({});
+  const membersWithMovies = await memberModel.aggregate([
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "MemberId",
+        as: "subscriptions",
+      },
+    },
+    {
+      $project: {
+        Name: 1,
+        Email: 1,
+        City: 1,
+        Phone: 1,
+        Movies: "$subscriptions.Movies",
+      },
+    },
+  ]);
+  return membersWithMovies;
 };
 
 export const getMember = async (id) => {
