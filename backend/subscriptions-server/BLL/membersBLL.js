@@ -1,4 +1,5 @@
 import memberModel from "../models/memberModel.js";
+import { getRandomPhone } from "../utils/members.js";
 import { getMembersFromAPI } from "../DAL/membersWS.js";
 
 export const insertMembers = async () => {
@@ -9,6 +10,7 @@ export const insertMembers = async () => {
       Name: member.name,
       Email: member.email,
       City: member.address.city,
+      Phone: getRandomPhone()
     };
   });
 

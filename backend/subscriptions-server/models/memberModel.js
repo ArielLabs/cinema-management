@@ -5,6 +5,7 @@ const memberSchema = new Schema(
     Name: String,
     Email: String,
     City: String,
+    Phone: String
   },
   {
     versionKey: false,
