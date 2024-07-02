@@ -6,3 +6,9 @@ export const getMembers = async () => {
   const { message: members } = response.data;
   return members;
 };
+
+export const createMember = async (member) => {
+  const response = await axios.post(`${SUBSCRIPTIONS_API}/members`, member);
+  const { message } = response.data;
+  return message;
+};

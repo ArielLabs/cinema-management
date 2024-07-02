@@ -52,6 +52,7 @@ export const getMember = async (id) => {
 export const createMember = async (member) => {
   const newMember = new memberModel(member);
   await newMember.save();
+  return "Saved successfully!";
 };
 
 export const updateMember = async (id, member) => {

@@ -1,11 +1,15 @@
 import useInput from "../../hooks/use-input";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../utils/http";
+import { displayAlert } from "../../utils/alerts";
 import { TextField, Button } from "@mui/material";
 import styles from "./MemberForm.module.css";
 
 const MemberForm = (prop) => {
   const { mode, member } = prop;
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     value: name,
@@ -54,16 +58,38 @@ const MemberForm = (prop) => {
     navigate("/cinema/subscriptions");
   };
 
+  const sendMember = (detailsMember) => {
+    if (mode === "create") {
+      return axiosInstance.post("members", detailsMember);
+    }
+    return axiosInstance.put(`members/${member._id}`, detailsMember);
+  };
+
+  const { mutate: addMember } = useMutation({
+    mutationKey: "add-member",
+    mutationFn: sendMember,
+    onSuccess: async (res) => {
+      const { message } = res.data;
+      await displayAlert("success", message);
+      await queryClient.invalidateQueries("fetch-members");
+      navigate("/cinema/subscriptions");
+    },
+    onError: async (err) => {
+      const { message } = err.response.data;
+      await displayAlert("error", message);
+    },
+  });
+
   const submitMemberFormHandler = (event) => {
     event.preventDefault();
-    
+
     const memberDetails = {
-        Name: name,
-        Email: email,
-        City: city,
-        Phone: phone
-    }
-    console.log(memberDetails);
+      Name: name,
+      Email: email,
+      City: city,
+      Phone: phone,
+    };
+    addMember(memberDetails);
   };
 
   const titleForm =
@@ -82,7 +108,7 @@ const MemberForm = (prop) => {
       </div>
       <div className={styles.memberFormFields}>
         <div className={styles.coupleFields}>
-          <div style={{ width: "38%" }}>
+          <div style={{ width: "40%" }}>
             <TextField
               label="Name"
               type="text"
@@ -114,7 +140,7 @@ const MemberForm = (prop) => {
               }}
             />
           </div>
-          <div style={{ width: "38%" }}>
+          <div style={{ width: "40%" }}>
             <TextField
               label="Email"
               type="text"
@@ -148,7 +174,7 @@ const MemberForm = (prop) => {
           </div>
         </div>
         <div className={styles.coupleFields}>
-          <div style={{ width: "38%" }}>
+          <div style={{ width: "40%" }}>
             <TextField
               label="City"
               type="text"
@@ -180,7 +206,7 @@ const MemberForm = (prop) => {
               }}
             />
           </div>
-          <div style={{ width: "38%" }}>
+          <div style={{ width: "40%" }}>
             <TextField
               label="Phone"
               type="text"
