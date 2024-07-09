@@ -65,8 +65,8 @@ const MemberForm = (prop) => {
     return axiosInstance.put(`members/${member._id}`, detailsMember);
   };
 
-  const { mutate: addMember } = useMutation({
-    mutationKey: "add-member",
+  const { mutate: submitMember } = useMutation({
+    mutationKey: (mode === "create") ? "add-member" : "update-member",
     mutationFn: sendMember,
     onSuccess: async (res) => {
       const { message } = res.data;
@@ -89,7 +89,7 @@ const MemberForm = (prop) => {
       City: city,
       Phone: phone,
     };
-    addMember(memberDetails);
+    submitMember(memberDetails);
   };
 
   const titleForm =

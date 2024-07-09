@@ -18,3 +18,9 @@ export const createMember = async (member) => {
   const { message } = response.data;
   return message;
 };
+
+export const updateMember = async (id, member) => {
+  const response = await axios.put(`${SUBSCRIPTIONS_API}/members/${id}`, member);
+  const { message } = response.data;
+  return message;
+};

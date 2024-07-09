@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getMembers, getMember, createMember } from "../BLL/membersBLL.js";
+import {
+  getMembers,
+  getMember,
+  createMember,
+  updateMember,
+} from "../BLL/membersBLL.js";
 
 const router = Router();
 
@@ -27,6 +32,17 @@ router.post("/", async (req, res) => {
     const member = req.body;
     const result = await createMember(member);
     res.status(201).json({ message: result });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const member = req.body;
+  try {
+    const result = await updateMember(id, member);
+    res.status(200).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }

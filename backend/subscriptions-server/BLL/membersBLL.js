@@ -56,7 +56,8 @@ export const createMember = async (member) => {
 };
 
 export const updateMember = async (id, member) => {
-  return await memberModel.findByIdAndUpdate(id, member);
+  await memberModel.findByIdAndUpdate(id, member);
+  return "Updated successfully!";
 };
 
 export const deleteMember = async (id) => {
