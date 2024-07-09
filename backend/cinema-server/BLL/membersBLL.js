@@ -7,6 +7,12 @@ export const getMembers = async () => {
   return members;
 };
 
+export const getMember = async (id) => {
+  const response = await axios.get(`${SUBSCRIPTIONS_API}/members/${id}`);
+  const { message: member } = response.data;
+  return member;
+};
+
 export const createMember = async (member) => {
   const response = await axios.post(`${SUBSCRIPTIONS_API}/members`, member);
   const { message } = response.data;

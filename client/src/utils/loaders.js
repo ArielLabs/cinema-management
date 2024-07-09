@@ -23,3 +23,14 @@ export const fetchMovie = async ({ params }) => {
     return redirect("/login");
   }
 };
+
+export const fetchMember = async ({ params }) => {
+  const { id } = params;
+  try {
+    const { data } = await axiosInstance.get(`members/${id}`);
+    return data;
+  } catch (err) {
+    displayAlert("error", err.response.data.message);
+    return redirect("/login");
+  }
+};

@@ -5,14 +5,15 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import MoviesPage from "./pages/MoviesPage/MoviesPage";
 import MoviePage from "./pages/MoviePage/MoviePage";
-import NewMoviePage from "./pages/NewMoviePage/NewMoviePage";
 import UsersPage from "./pages/UsersPage/UsersPage";
+import SubscriptionsPage from "./pages/SubscriptionsPage/SubscriptionsPage";
 import NewUserPage from "./pages/NewUserPage/NewUserPage";
+import NewMoviePage from "./pages/NewMoviePage/NewMoviePage";
+import NewMemberPage from "./pages/NewMemberPage/NewMemberPage";
 import EditMoviePage from "./pages/EditMoviePage/EditMoviePage";
 import EditUserPage from "./pages/EditUserPage/EditUserPage";
-import SubscriptionsPage from "./pages/SubscriptionsPage/SubscriptionsPage";
-import NewMemberPage from "./pages/NewMemberPage/NewMemberPage";
-import { fetchMovie, fetchUser } from "./utils/loaders";
+import EditMemberPage from "./pages/EditMemberPage/EditMemberPage";
+import { fetchMovie, fetchUser, fetchMember } from "./utils/loaders";
 
 const routerApp = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ const routerApp = createBrowserRouter([
       { path: "users/:id", element: <EditUserPage />, loader: fetchUser },
       { path: "subscriptions", element: <SubscriptionsPage /> },
       { path: "subscriptions/new", element: <NewMemberPage /> },
+      { path: "subscriptions/:id", element: <EditMemberPage />, loader: fetchMember }
     ],
   },
 ]);

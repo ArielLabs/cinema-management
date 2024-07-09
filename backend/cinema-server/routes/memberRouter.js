@@ -1,11 +1,21 @@
 import { Router } from "express";
-import { getMembers, createMember } from "../BLL/membersBLL.js";
+import { getMembers, getMember, createMember } from "../BLL/membersBLL.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
     const result = await getMembers();
+    res.status(200).json({ message: result });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await getMember(id);
     res.status(200).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });

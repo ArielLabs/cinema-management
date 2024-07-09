@@ -23,7 +23,10 @@ const SubscriptionsTable = (prop) => {
   };
 
   const openDeleteModalHandler = () => {};
-  const editMemberHandler = () => {};
+
+  const editMemberHandler = (memberId) => {
+    navigate(`${memberId}`);
+  };
 
   const toggleSubscribeToMovieHandler = () => {
     setOpenModalSubscribe((prevState) => !prevState);
