@@ -76,34 +76,16 @@ const UserForm = (prop) => {
     navigate("/cinema/users");
   };
 
-  const sendNewUser = (newUserDetails) => {
-    return axiosInstance.post("users", newUserDetails);
+  const sendUser = (detailsUser) => {
+    if(mode === "create"){
+      return axiosInstance.post("users", detailsUser);
+    }
+    return axiosInstance.put(`users/${details._id}`, detailsUser);
   };
 
-  const sendUpdatedUser = (dataUser) => {
-    return axiosInstance.put(`users/${details._id}`, dataUser);
-  };
-
-  const { mutate: createNewUser } = useMutation({
-    mutationKey: "new-user",
-    mutationFn: sendNewUser,
-    onSuccess: (res) => {
-      const { message } = res.data;
-      displayAlert("success", message).then(() => {
-        queryClient.invalidateQueries("fetch-users").then(() => {
-          navigate("/cinema/users");
-        });
-      });
-    },
-    onError: (err) => {
-      const { message } = err.response.data;
-      displayAlert("error", message);
-    },
-  });
-
-  const { mutate: updateUser } = useMutation({
-    mutationKey: "update-user",
-    mutationFn: sendUpdatedUser,
+  const { mutate: submitUser } = useMutation({
+    mutationKey: (mode === "create") ? "add-user" : "update-user",
+    mutationFn: sendUser,
     onSuccess: (res) => {
       const { message } = res.data;
       displayAlert("success", message).then(() => {
@@ -131,11 +113,7 @@ const UserForm = (prop) => {
         subscriptions: subscriptionsPermissions,
       },
     };
-    if(mode === "create"){
-      createNewUser(dataUser);
-    }else{
-      updateUser(dataUser);
-    }
+    submitUser(dataUser);
   };
 
   const titleForm =

@@ -108,7 +108,7 @@ const MemberForm = (prop) => {
       </div>
       <div className={styles.memberFormFields}>
         <div className={styles.coupleFields}>
-          <div style={{ width: "40%" }}>
+          <div style={{ width: "45%" }}>
             <TextField
               label="Name"
               type="text"
@@ -140,7 +140,7 @@ const MemberForm = (prop) => {
               }}
             />
           </div>
-          <div style={{ width: "40%" }}>
+          <div style={{ width: "45%" }}>
             <TextField
               label="Email"
               type="text"
@@ -174,7 +174,7 @@ const MemberForm = (prop) => {
           </div>
         </div>
         <div className={styles.coupleFields}>
-          <div style={{ width: "40%" }}>
+          <div style={{ width: "45%" }}>
             <TextField
               label="City"
               type="text"
@@ -206,7 +206,7 @@ const MemberForm = (prop) => {
               }}
             />
           </div>
-          <div style={{ width: "40%" }}>
+          <div style={{ width: "45%" }}>
             <TextField
               label="Phone"
               type="text"
