@@ -2,7 +2,10 @@ import { Schema, model } from "mongoose";
 
 const screeningScema = new Schema(
   {
-    MovieId: Schema.Types.ObjectId,
+    MovieId: {
+      type: Schema.Types.ObjectId,
+      ref: "movies",
+    },
     Date: Date,
     Hour: String,
     Hall: String,

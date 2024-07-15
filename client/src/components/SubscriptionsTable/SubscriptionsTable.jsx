@@ -129,6 +129,7 @@ const SubscriptionsTable = (prop) => {
       <MovieSubscribe
         onOpen={openModalSubscribe}
         onClose={toggleSubscribeToMovieHandler}
+        members={members}
       />
     </div>
   );
