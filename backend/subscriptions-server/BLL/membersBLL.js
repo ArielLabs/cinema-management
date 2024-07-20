@@ -23,7 +23,7 @@ export const hasMembers = async () => {
 };
 
 export const getMembers = async () => {
-  const membersWithMovies = await memberModel.aggregate([
+  return await memberModel.aggregate([
     {
       $lookup: {
         from: "subscriptions",
@@ -33,16 +33,65 @@ export const getMembers = async () => {
       },
     },
     {
-      $project: {
-        Name: 1,
-        Email: 1,
-        City: 1,
-        Phone: 1,
-        Movies: "$subscriptions.Movies",
+      $unwind: {
+        path: "$subscriptions",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "screenings",
+        localField: "subscriptions.Screenings",
+        foreignField: "_id",
+        as: "screenings",
+      },
+    },
+    {
+      $unwind: {
+        path: "$screenings",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "movies",
+        localField: "screenings.MovieId",
+        foreignField: "_id",
+        as: "screenings.movie",
+        pipeline: [
+          {
+            $project: {
+              Name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: {
+        path: "$screenings.movie",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        Name: { $first: "$Name" },
+        Email: { $first: "$Email" },
+        City: { $first: "$City" },
+        Phone: { $first: "$Phone" },
+        Screenings: {
+          $push: {
+            _id: "$screenings._id",
+            Movie: "$screenings.movie",
+            Date: "$screenings.Date",
+            Hall: "$screenings.Hall",
+            Hour: "$screenings.Hour",
+          },
+        },
       },
     },
   ]);
-  return membersWithMovies;
 };
 
 export const getMember = async (id) => {

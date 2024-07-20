@@ -18,6 +18,15 @@ const SubscriptionsTable = (prop) => {
     return `${phone.slice(0, 3)}-${phone.slice(3, 10)}`;
   };
 
+  const dateFormat = (dateInput) => {
+    const date = new Date(dateInput);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
   const newMemberHandler = () => {
     navigate("new");
   };
@@ -74,9 +83,9 @@ const SubscriptionsTable = (prop) => {
               <th style={{ width: "25%", textAlign: "left" }}>
                 <div style={{ marginLeft: "1rem" }}>Name & Email</div>
               </th>
-              <th style={{ width: "15%" }}>City</th>
-              <th style={{ width: "15%" }}>Phone</th>
-              <th style={{ width: "37%" }}>Movies Watched</th>
+              <th style={{ width: "13%" }}>City</th>
+              <th style={{ width: "13%" }}>Phone</th>
+              <th style={{ width: "41%" }}>Movies Watched</th>
             </tr>
           </thead>
           <tbody className={styles.scrollableTbody}>
@@ -105,18 +114,26 @@ const SubscriptionsTable = (prop) => {
                     </div>
                   </div>
                 </td>
-                <td style={{ width: "15%" }} className={styles.content}>
+                <td style={{ width: "13%" }} className={styles.content}>
                   {member.City}
                 </td>
-                <td style={{ width: "15%" }} className={styles.content}>
+                <td style={{ width: "13%" }} className={styles.content}>
                   {phoneFormat(member.Phone)}
                 </td>
-                <td style={{ width: "37%" }}>
+                <td style={{ width: "41%" }}>
                   <div className={styles.moviesSection}>
-                    {member.Movies.length > 0 && (
-                      <SelectList label={"Movies"} options={member.Movies} />
+                    {Object.keys(member.Screenings[0]).length > 0 && (
+                      <SelectList
+                        label={"Movies"}
+                        options={member.Screenings.map((s) => {
+                          return {
+                            _id: s._id,
+                            content: `${s.Movie.Name} - ${dateFormat(s.Date)} ${s.Hour}, Hall: ${s.Hall}`,
+                          };
+                        })}
+                      />
                     )}
-                    {member.Movies.length === 0 && (
+                    {Object.keys(member.Screenings[0]).length === 0 && (
                       <p className={styles.content}>Not subscribed to movies</p>
                     )}
                   </div>

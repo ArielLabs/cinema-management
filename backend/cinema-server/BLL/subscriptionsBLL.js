@@ -6,3 +6,15 @@ export const getUnsubscribeMovies = async (id) => {
   const { message } = response.data;
   return message;
 };
+
+export const createSubscription = async (subscription) => {
+  const response = await axios.post(`${SUBSCRIPTIONS_API}/subscriptions`, subscription);
+  const { message } = response.data;
+  return message;
+};
+
+export const updateSubcription = async (id, subscription) => {
+  const response = await axios.put(`${SUBSCRIPTIONS_API}/subscriptions/${id}`, subscription);
+  const { message } = response.data;
+  return message;
+};

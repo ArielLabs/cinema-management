@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { axiosInstance } from "../../utils/http";
+import { displayAlert } from "../../utils/alerts";
+import { useMutation, useQueryClient } from "react-query";
 import {
   Modal,
   Box,
@@ -54,18 +56,41 @@ const Field = (prop) => {
 const MovieSubscribe = (prop) => {
   const { onOpen, onClose, members } = prop;
   const [activeStep, setActiveStep] = useState(0);
-  const [form, setForm] = useState({ member: null, movie: null, date: null });
+  const [form, setForm] = useState({
+    member: null,
+    movie: null,
+    screening: null,
+  });
   const [allScreening, setAllScreening] = useState([]);
   const membersRef = useRef([]);
+  const queryClient = useQueryClient();
 
-  const formmater = (values) => {
-    return values.message.map((member) => {
-      return {
-        _id: member._id,
-        Name: member.Name,
-      };
-    });
+  const sendSubscription = async (detailsSubscription) => {
+    const subscriberId = allScreening.subscriptionId;
+    if (subscriberId) {
+      return await axiosInstance.put(
+        `subscriptions/${subscriberId}`,
+        detailsSubscription
+      );
+    }
+    return await axiosInstance.post(`subscriptions`, detailsSubscription);
   };
+
+  const { mutate: submitSubscribe } = useMutation({
+    mutationKey: "subscribe-movie",
+    mutationFn: sendSubscription,
+    onSuccess: (res) => {
+      const { message } = res.data;
+      onCloseHandler();
+      displayAlert("success", message).then(() => {
+        queryClient.invalidateQueries("fetch-members");
+      });
+    },
+    onError: (err) => {
+      const { message } = err.response.data;
+      displayAlert("error", message);
+    },
+  });
 
   const dateFormat = (dateInput) => {
     const date = new Date(dateInput);
@@ -76,8 +101,19 @@ const MovieSubscribe = (prop) => {
     });
   };
 
+  const memberOptions = (values) => {
+    return values.message.map((member) => {
+      return {
+        _id: member._id,
+        Name: member.Name,
+      };
+    });
+  };
+
   const moviesOptions = () => {
-    const unsubscribeMovies = allScreening.map((movie) => movie.MovieId);
+    const unsubscribeMovies = allScreening.moviesWithScreenings.map(
+      (movie) => movie.MovieId
+    );
     const uniqueUnsubscribeMovies = [
       ...new Set(unsubscribeMovies.map((m) => JSON.stringify(m))),
     ].map((str) => JSON.parse(str));
@@ -85,7 +121,7 @@ const MovieSubscribe = (prop) => {
   };
 
   const screeningOptions = () => {
-    return allScreening
+    return allScreening.moviesWithScreenings
       .filter((movie) => movie.MovieId._id === form.movie._id)
       .map((screen) => {
         return {
@@ -99,12 +135,26 @@ const MovieSubscribe = (prop) => {
 
   useMemo(() => {
     if (members) {
-      membersRef.current = formmater(members);
+      membersRef.current = memberOptions(members);
     }
   }, [members]);
 
+  const onCloseHandler = () => {
+    setActiveStep(0);
+    setForm({ member: null, movie: null, screening: null });
+    onClose();
+  };
+
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === steps.length - 1) {
+      const subscribeDetails = {
+        MemberId: form.member._id,
+        Screenings: form.screening._id,
+      };
+      submitSubscribe(subscribeDetails);
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -117,7 +167,7 @@ const MovieSubscribe = (prop) => {
     } else if (activeStep === 1) {
       return !form.movie;
     }
-    return !form.date;
+    return !form.screening;
   };
 
   const setSubscribeForm = async (label, value) => {
@@ -144,11 +194,11 @@ const MovieSubscribe = (prop) => {
       });
     }
 
-    if (label === "Day & Time") {
+    if (label === "Screening") {
       setForm((prevState) => {
         return {
           ...prevState,
-          date: value,
+          screening: value,
         };
       });
     }
@@ -178,11 +228,11 @@ const MovieSubscribe = (prop) => {
       ),
     },
     {
-      label: "Choose a day and time",
+      label: "Select Screening",
       content: (
         <Field
-          label={"Day & Time"}
-          initValue={form.date ? form.date.Name : ""}
+          label={"Screening"}
+          initValue={form.screening ? form.screening.Name : ""}
           options={screeningOptions}
           chosen={setSubscribeForm}
         />
@@ -192,9 +242,11 @@ const MovieSubscribe = (prop) => {
       label: "Summary",
       content: `${form.member?.Name} ordered the movie ${
         form.movie?.Name
-      } for the date ${form.date?.Name.split("-")[0]} at ${
-        form.date?.Name.split("-")[1].split(",")[0]
-      } in Hall ${form.date?.Name.split("-")[1].split(",")[1].split(":")[1]}`,
+      } for the date ${form.screening?.Name.split("-")[0]} at ${
+        form.screening?.Name.split("-")[1].split(",")[0]
+      } in Hall ${
+        form.screening?.Name.split("-")[1].split(",")[1].split(":")[1]
+      }`,
     },
   ];
 
@@ -202,7 +254,7 @@ const MovieSubscribe = (prop) => {
     <Modal open={onOpen}>
       <Box className={styles.container}>
         <div className={styles.close}>
-          <IconButton onClick={onClose}>
+          <IconButton onClick={onCloseHandler}>
             <CloseIcon />
           </IconButton>
         </div>
@@ -220,7 +272,7 @@ const MovieSubscribe = (prop) => {
                       disabled={isDisabled()}
                       sx={{ mt: 1, mr: 1 }}
                     >
-                      {index === steps.length - 1 ? "Finish" : "Continue"}
+                      {index === steps.length - 1 ? "Subscribe" : "Continue"}
                     </Button>
                     <Button
                       disabled={index === 0}
