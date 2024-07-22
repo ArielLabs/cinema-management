@@ -7,11 +7,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import SelectList from "../SelectList/SelectList";
 import MovieSubscribe from "../MovieSubscribe/MovieSubscribe";
+import ModalDelete from "../ModalDelete/ModalDelete";
 import styles from "./SubscriptionsTable.module.css";
 
 const SubscriptionsTable = (prop) => {
   const { members, isLoading } = prop;
   const [openModalSubscribe, setOpenModalSubscribe] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
   const navigate = useNavigate();
 
   const phoneFormat = (phone) => {
@@ -31,7 +34,15 @@ const SubscriptionsTable = (prop) => {
     navigate("new");
   };
 
-  const openDeleteModalHandler = () => {};
+  const openDeleteModalHandler = (memberId) => {
+    setSelectedMember(memberId);
+    setOpenModalDelete((prevState) => !prevState);
+  };
+
+  const closeDeleteModalHandler = () => {
+    setSelectedMember(null);
+    setOpenModalDelete((prevState) => !prevState);
+  };
 
   const editMemberHandler = (memberId) => {
     navigate(`${memberId}`);
@@ -128,7 +139,9 @@ const SubscriptionsTable = (prop) => {
                         options={member.Screenings.map((s) => {
                           return {
                             _id: s._id,
-                            content: `${s.Movie.Name} - ${dateFormat(s.Date)} ${s.Hour}, Hall: ${s.Hall}`,
+                            content: `${s.Movie.Name} - ${dateFormat(s.Date)} ${
+                              s.Hour
+                            }, Hall: ${s.Hall}`,
                           };
                         })}
                       />
@@ -147,6 +160,12 @@ const SubscriptionsTable = (prop) => {
         onOpen={openModalSubscribe}
         onClose={toggleSubscribeToMovieHandler}
         members={members}
+      />
+      <ModalDelete
+        onOpen={openModalDelete}
+        itemId={selectedMember}
+        itemType={"members"}
+        onClose={closeDeleteModalHandler}
       />
     </div>
   );

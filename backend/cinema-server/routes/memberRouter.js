@@ -4,6 +4,7 @@ import {
   getMember,
   createMember,
   updateMember,
+  deleteMember,
 } from "../BLL/membersBLL.js";
 
 const router = Router();
@@ -42,6 +43,16 @@ router.put("/:id", async (req, res) => {
   const member = req.body;
   try {
     const result = await updateMember(id, member);
+    res.status(200).json({ message: result });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await deleteMember(id);
     res.status(200).json({ message: result });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });

@@ -12,7 +12,7 @@ const ModalDelete = (prop) => {
     return await axiosInstance.delete(`${itemType}/${itemId}`);
   };
 
-  const { mutate: deleteUser } = useMutation({
+  const { mutate: deleteItem } = useMutation({
     mutationKey: "delete-item",
     mutationFn: submitDelete,
     onSuccess: (res) => {
@@ -21,6 +21,9 @@ const ModalDelete = (prop) => {
       displayAlert("success", message).then(() => {
         if (itemType === "users") {
           queryClient.invalidateQueries("fetch-users");
+        }
+        if (itemType === "members") {
+          queryClient.invalidateQueries("fetch-members");
         }
       });
     },
@@ -32,11 +35,7 @@ const ModalDelete = (prop) => {
   });
 
   const deleteHandler = () => {
-    deleteUser();
-  };
-
-  const cancelHandler = () => {
-    onClose();
+    deleteItem();
   };
 
   let item = "";
@@ -61,7 +60,7 @@ const ModalDelete = (prop) => {
           <Button variant="contained" onClick={deleteHandler}>
             Delete
           </Button>
-          <Button variant="outlined" onClick={cancelHandler}>
+          <Button variant="outlined" onClick={onClose}>
             Cancel
           </Button>
         </div>

@@ -6,6 +6,7 @@ import {
   updateMember,
   deleteMember,
 } from "../BLL/membersBLL.js";
+import { deleteSubscription } from "../BLL/subscriptionsBLL.js";
 
 const router = Router();
 
@@ -58,8 +59,11 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await deleteMember(id);
-    if (!result) {
+    const [resultMember, resultSubscription] = await Promise.all([
+      deleteMember(id),
+      deleteSubscription(id),
+    ]);
+    if (!resultMember || !resultSubscription.acknowledged) {
       return res.status(404).json({ message: "The member was not found" });
     }
     res.status(200).json({ message: "Deleted!" });

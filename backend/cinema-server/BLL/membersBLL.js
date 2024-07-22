@@ -24,3 +24,9 @@ export const updateMember = async (id, member) => {
   const { message } = response.data;
   return message;
 };
+
+export const deleteMember = async (id) => {
+  const response = await axios.delete(`${SUBSCRIPTIONS_API}/members/${id}`);
+  const { message } = response.data;
+  return message;
+};

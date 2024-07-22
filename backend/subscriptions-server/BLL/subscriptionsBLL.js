@@ -44,7 +44,11 @@ export const createSubscription = async (subscription) => {
 
 export const updateSubcription = async (id, subscription) => {
   await subscriptionModel.findByIdAndUpdate(id, {
-    $push: { Screenings: subscription.Screenings},
+    $push: { Screenings: subscription.Screenings },
   });
   return "Saved successfully!";
+};
+
+export const deleteSubscription = async (memberId) => {
+  return await subscriptionModel.deleteOne({ MemberId: memberId });
 };
