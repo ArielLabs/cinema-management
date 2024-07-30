@@ -14,20 +14,21 @@ const MovieInfo = (prop) => {
   const { movie } = prop;
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const subs = [
-    { id: 1, name: "Gil Milo", date: "11/14/2023" },
-    { id: 2, name: "Dana Varod", date: "12/19/2023" },
-    { id: 3, name: "Orit Sason", date: "08/22/2023" },
-    { id: 4, name: "Pini Natcho", date: "06/30/2023" },
-    { id: 5, name: "Barbi Cohen", date: "11/14/2023" },
-    { id: 6, name: "Eli Mizrachi", date: "03/02/2023" },
-  ];
 
   const dateFormat = (dateInput) => {
     const date = new Date(dateInput);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
+      day: "numeric",
+    });
+  };
+
+  const dateFormatSubscriber = (dateInput) => {
+    const date = new Date(dateInput);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "numeric",
       day: "numeric",
     });
   };
@@ -138,16 +139,25 @@ const MovieInfo = (prop) => {
               sx={{ color: "white", width: "2.5rem", height: "2.5rem" }}
             />
           </h2>
-          <div className={styles.subscriptionsList}>
-            {subs.map((sub) => (
-              <div key={sub.id} className={styles.listItem}>
-                <span>
-                  <span className={styles.subsItem}>{sub.name}</span> -{" "}
-                  {sub.date}
-                </span>
+          {movie.Subscribers.length > 0 && (
+            <div className={styles.subscriptionsList}>
+              {movie.Subscribers.map((sub) => (
+                <div key={sub.id} className={styles.listItem}>
+                  <span>
+                    <span className={styles.subsItem}>{sub.name}</span> -{" "}
+                    {dateFormatSubscriber(sub.date)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          {movie.Subscribers.length === 0 && (
+            <div className={styles.subscriptionsList}>
+              <div className={styles.noSubscribers}>
+                <span className={styles.noSubscribersText}>No movie subscriptions</span>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       <ModalDelete

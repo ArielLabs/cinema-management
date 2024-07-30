@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getMovies,
   getMovie,
+  getMovieSubscribers,
   createMovie,
   updateMovie,
   deleteMovie,
@@ -22,8 +23,15 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await getMovie(id);
-    if (!result) {
+    const [resultMovie, resultSubscribers] = await Promise.all([
+      getMovie(id),
+      getMovieSubscribers(id),
+    ]);
+    const result = {
+      ...resultMovie.toObject(),
+      Subscribers: resultSubscribers,
+    };
+    if (!resultMovie) {
       return res.status(404).json({ message: "The movie was not found" });
     }
     res.status(200).json({ message: result });

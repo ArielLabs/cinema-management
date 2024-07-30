@@ -1,4 +1,5 @@
 import movieModel from "../models/movieModel.js";
+import subscriptionModel from "../models/subscriptionModel.js";
 import { getMoviesFromFile } from "../DAL/moviesFile.js";
 
 export const insertMovies = async () => {
@@ -52,6 +53,31 @@ export const getMovies = async (page, search) => {
 
 export const getMovie = async (id) => {
   return await movieModel.findById(id);
+};
+
+export const getMovieSubscribers = async (id) => {
+  const subscriptions = await subscriptionModel
+    .find({})
+    .populate({
+      path: "MemberId",
+      model: "members",
+    })
+    .populate({
+      path: "Screenings",
+      model: "screenings",
+    });
+
+  const subscribers = subscriptions
+    .filter((s) => s.Screenings.some((m) => m.MovieId == id))
+    .map((element) => {
+      return {
+        id: element.MemberId._id,
+        name: element.MemberId.Name,
+        date: element.Screenings[0].Date,
+      };
+    });
+
+  return subscribers;
 };
 
 export const createMovie = async (movie) => {

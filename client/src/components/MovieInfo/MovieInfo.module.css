@@ -134,3 +134,16 @@
     cursor: pointer;
     margin-left: 1.5rem;
 }
+
+.noSubscribers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.noSubscribersText{
+    color: white;
+    text-align: center;
+    font-size: 1.2rem;
+}

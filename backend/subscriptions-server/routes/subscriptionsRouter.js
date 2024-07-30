@@ -1,21 +1,12 @@
 import { Router } from "express";
 import {
-  getSubscribers,
+  getSubscribersByMovie,
   getUnsubscribeMovies,
   createSubscription,
   updateSubcription,
 } from "../BLL/subscriptionsBLL.js";
 
 const router = Router();
-
-router.get("/", async (req, res) => {
-  try {
-    const result = await getSubscribers();
-    res.status(200).json({ message: result });
-  } catch (err) {
-    res.status(500).json({ message: "Error occured!" });
-  }
-});
 
 router.get("/:id/unsubscribe", async (req, res) => {
   const { id } = req.params;

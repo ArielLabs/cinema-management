@@ -1,20 +1,6 @@
 import subscriptionModel from "../models/subscriptionModel.js";
 import screeningModel from "../models/screeningModel.js";
 
-export const getSubscribers = async () => {
-  return await subscriptionModel
-    .find({})
-    .populate({
-      path: "MemberId",
-      model: "members",
-    })
-    .populate({
-      path: "Screenings",
-      model: "screenings",
-      populate: { path: "MovieId", model: "movies", select: "Name" },
-    });
-};
-
 export const getUnsubscribeMovies = async (id) => {
   const subscription = await subscriptionModel
     .findOne({ MemberId: id })
