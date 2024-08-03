@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  getSubscribersByMovie,
   getUnsubscribeMovies,
   createSubscription,
   updateSubcription,

@@ -53,7 +53,8 @@ const LoginForm = () => {
   const { mutate: userSignin } = useMutation({
     mutationKey: 'user-login',
     mutationFn: userLogin,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      console.log(res);
       navigate('/cinema/movies');
     },
     onError: (err) => {

@@ -22,7 +22,9 @@ import styles from "./MoviesPage.module.css";
 const MoviesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { page: currentPage, chars: currentChars } = useSelector((state) => state.search);
+  const { page: currentPage, chars: currentChars } = useSelector(
+    (state) => state.search
+  );
   const [moviesList, setMoviesList] = useState({ totalPages: 0, movies: [] });
   const [textSearch, setTextSearch] = useState(currentChars);
 
@@ -31,12 +33,19 @@ const MoviesPage = () => {
   }, [moviesList]);
 
   const fetchMovies = async (searchDetails) => {
-    const { page, chars } = searchDetails;
-    const pageNumber = page ? page : currentPage;
-    const filterByChars = chars ? chars : currentChars;
-    return await axiosInstance.get("movies", {
-      params: { page: pageNumber, search: filterByChars },
-    });
+    try {
+      const { page, chars } = searchDetails;
+      const pageNumber = page ? page : currentPage;
+      const filterByChars = chars ? chars : currentChars;
+      return await axiosInstance.get("movies", {
+        params: { page: pageNumber, search: filterByChars },
+      });
+    } catch (err) {
+      const { status } = err.response;
+      if (status === 401 || status === 403) {
+        navigate("/login");
+      }
+    }
   };
 
   const { isLoading } = useQuery({

@@ -7,9 +7,17 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const token = await authentication(email, password);
-    res.status(200).json({ message: token });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax'
+    });
+    res.status(201).json({ message: "Authenticated!" });
   } catch (err) {
-    if (err.message === "User does not exist" || err.message === "Wrong password") {
+    if (
+      err.message === "User does not exist" ||
+      err.message === "Wrong password"
+    ) {
       res.status(401).json({ message: err.message });
     } else {
       res.status(500).json({ message: "Internal server error" });
