@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../environment.js";
 
 export const verifyToken = (req, res, next) => {
-  console.log(req.cookies);
   const token = req.cookies.token;
 
   if (!token) {

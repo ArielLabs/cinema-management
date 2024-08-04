@@ -6,13 +6,24 @@ const router = Router();
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const token = await authentication(email, password);
+    const { token, role, fullName, permissions } = await authentication(
+      email,
+      password
+    );
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      sameSite: 'lax'
+      sameSite: "lax",
     });
-    res.status(201).json({ message: "Authenticated!" });
+
+    res.status(201).json({
+      message: {
+        role,
+        fullName,
+        permissions,
+      },
+    });
   } catch (err) {
     if (
       err.message === "User does not exist" ||

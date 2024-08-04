@@ -1,4 +1,6 @@
 import userModel from "../models/userModel.js";
+import { readPermissions } from "../DAL/permissionsFile.js";
+import { readUsers } from "../DAL/usersFile.js";
 import jwt from "jsonwebtoken";
 import { compare, hash } from "bcrypt";
 import { SECRET_KEY } from "../environment.js";
@@ -14,9 +16,24 @@ export const authentication = async (email, password) => {
     throw new Error("Wrong password");
   }
 
-  return jwt.sign({ id: user._id, email: user.Email }, SECRET_KEY, {
+  const token = jwt.sign({ id: user._id, email: user.Email }, SECRET_KEY, {
     expiresIn: "20min",
   });
+
+  const { users } = await readUsers();
+  const userDetails = users.find((u) => u._id === (user._id).toString());
+
+  const { permissions } = await readPermissions();
+  const { Permissions: userPermissions } = permissions.find(
+    (p) => p._id === (user._id).toString()
+  );
+
+  return {
+    token: token,
+    role: userDetails.Role,
+    fullName: `${userDetails.FirstName} ${userDetails.LastName}`,
+    permissions: userPermissions
+  };
 };
 
 export const registeration = async (email, password) => {

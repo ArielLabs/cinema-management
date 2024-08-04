@@ -2,6 +2,7 @@ export const personalInfo = {
   FirstName: "Ron",
   LastName: "Levi",
   SessionTimeOut: "60",
+  Role: "Admin",
   CreatedDate: new Date().toLocaleString("en-US", {
     year: "numeric",
     month: "long",

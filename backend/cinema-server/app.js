@@ -10,16 +10,13 @@ dbConnect();
 const app = express();
 
 app.use(cors({
-  origin: ["http://localhost:5173"],
-  methods: ["GET", "POST"],
+  origin: true,
   credentials: true
 }));
 
 app.use(cookieParser());
 
 app.use(json());
-
-app.use(express.urlencoded({ extended: true }));
 
 routesInit(app);
 

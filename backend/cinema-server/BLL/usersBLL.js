@@ -123,6 +123,7 @@ export const createUser = async (newUser) => {
     FirstName,
     LastName,
     SessionTimeOut,
+    Role: "User",
     CreatedDate: new Date().toLocaleString("en-US", {
       year: "numeric",
       month: "long",
@@ -175,6 +176,7 @@ export const updateUser = async (userId, detailsUser) => {
     FirstName: detailsUser.FirstName,
     LastName: detailsUser.LastName,
     SessionTimeOut: detailsUser.SessionTimeOut,
+    Role: detailsUser.Role,
     CreatedDate,
   };
 
