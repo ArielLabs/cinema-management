@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth";
 import { displayAlert } from "../../utils/alerts";
 import { axiosInstance } from "../../utils/http";
 import useInput from "../../hooks/use-input";
@@ -17,7 +19,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styles from "./LoginForm.module.css";
 
 const LoginForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const {
     value: emailEnteredValue,
@@ -54,7 +57,8 @@ const LoginForm = () => {
     mutationKey: 'user-login',
     mutationFn: userLogin,
     onSuccess: (res) => {
-      console.log(res);
+      const { message: authData } = res.data;
+      dispatch(authActions.setAuth(authData));
       navigate('/cinema/movies');
     },
     onError: (err) => {

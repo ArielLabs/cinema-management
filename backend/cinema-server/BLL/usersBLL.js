@@ -106,6 +106,22 @@ export const getUser = async (id) => {
   };
 };
 
+export const getUserPermissions = async (id) => {
+  const { users } = await readUsers();
+  const userDetails = users.find((u) => u._id === id.toString());
+
+  const { permissions } = await readPermissions();
+  const { Permissions: userPermissions } = permissions.find(
+    (p) => p._id === id.toString()
+  );
+
+  return {
+    role: userDetails.Role,
+    fullName: `${userDetails.FirstName} ${userDetails.LastName}`,
+    permissions: userPermissions,
+  };
+};
+
 export const createUser = async (newUser) => {
   const { FirstName, LastName, Email, SessionTimeOut, Permissions } = newUser;
   const tempPassword = await hash(uuidv4(), 10);
