@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
 import { axiosInstance } from "../utils/http";
 
-const AppInitializer = (prop) => {
+const InitializerProvider = (prop) => {
   const { children } = prop;
   const dispatch = useDispatch();
 
@@ -24,4 +24,4 @@ const AppInitializer = (prop) => {
   return <>{children}</>;
 };
 
-export default AppInitializer;
+export default InitializerProvider;
