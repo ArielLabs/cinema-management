@@ -123,7 +123,7 @@ export const getUserPermissions = async (id) => {
 };
 
 export const createUser = async (newUser) => {
-  const { FirstName, LastName, Email, SessionTimeOut, Permissions } = newUser;
+  const { FirstName, LastName, Email, SessionTimeOut, Role, Permissions } = newUser;
   const tempPassword = await hash(uuidv4(), 10);
 
   const user = await userModel.findOne({ Email: Email });
@@ -139,7 +139,7 @@ export const createUser = async (newUser) => {
     FirstName,
     LastName,
     SessionTimeOut,
-    Role: "User",
+    Role,
     CreatedDate: new Date().toLocaleString("en-US", {
       year: "numeric",
       month: "long",

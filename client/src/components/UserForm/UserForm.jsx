@@ -108,6 +108,7 @@ const UserForm = (prop) => {
       LastName: lastname,
       Email: email,
       SessionTimeOut: sessionTimeout,
+      Role: details.Role,
       Permissions: {
         movies: moviesPermissions,
         subscriptions: subscriptionsPermissions,
@@ -269,11 +270,13 @@ const UserForm = (prop) => {
         <div className={styles.coupleFields}>
           <PermissionsList
             groupname="Movies"
+            role={details.Role}
             initialValue={details.moviesPermissions}
             onTransferPermissions={onUpdatePermissionsHandler}
           />
           <PermissionsList
             groupname="Subscriptions"
+            role={details.Role}
             initialValue={details.subscriptionsPermissions}
             onTransferPermissions={onUpdatePermissionsHandler}
           />

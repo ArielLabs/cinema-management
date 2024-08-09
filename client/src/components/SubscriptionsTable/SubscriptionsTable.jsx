@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Button, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
@@ -12,6 +13,7 @@ import styles from "./SubscriptionsTable.module.css";
 
 const SubscriptionsTable = (prop) => {
   const { members, isLoading } = prop;
+  const { permissions } = useSelector((state) => state.auth);
   const [openModalSubscribe, setOpenModalSubscribe] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -54,22 +56,24 @@ const SubscriptionsTable = (prop) => {
 
   return (
     <div className={styles.subscriptionsTableContainer}>
-      <Button
-        variant="contained"
-        startIcon={<AddIcon />}
-        sx={{
-          marginBottom: "1rem",
-          marginRight: "1rem",
-          textTransform: "none",
-          backgroundColor: "#646cff",
-          "&:hover": {
-            backgroundColor: "#4a54fb",
-          },
-        }}
-        onClick={newMemberHandler}
-      >
-        New Member
-      </Button>
+      {permissions.subscriptions.includes("Create") && (
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          sx={{
+            marginBottom: "1rem",
+            marginRight: "1rem",
+            textTransform: "none",
+            backgroundColor: "#646cff",
+            "&:hover": {
+              backgroundColor: "#4a54fb",
+            },
+          }}
+          onClick={newMemberHandler}
+        >
+          New Member
+        </Button>
+      )}
       <Button
         variant="contained"
         startIcon={<SlideshowIcon />}
@@ -103,18 +107,24 @@ const SubscriptionsTable = (prop) => {
             {members.message.map((member) => (
               <tr key={member._id} className={styles.subscriptionRow}>
                 <td style={{ width: "8%" }}>
-                  <IconButton
-                    sx={{ color: "#fa626e" }}
-                    onClick={() => openDeleteModalHandler(member._id)}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                  <IconButton
-                    sx={{ color: "orange" }}
-                    onClick={() => editMemberHandler(member._id)}
-                  >
-                    <EditIcon />
-                  </IconButton>
+                  <div className={styles.subscriptionsActions}>
+                    {permissions.subscriptions.includes("Delete") && (
+                      <IconButton
+                        sx={{ color: "#fa626e" }}
+                        onClick={() => openDeleteModalHandler(member._id)}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    )}
+                    {permissions.subscriptions.includes("Edit") && (
+                      <IconButton
+                        sx={{ color: "orange" }}
+                        onClick={() => editMemberHandler(member._id)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    )}
+                  </div>
                 </td>
                 <td style={{ width: "25%" }}>
                   <div className={styles.sectionNameEmail}>

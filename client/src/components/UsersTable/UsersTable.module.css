@@ -69,6 +69,15 @@ tr:last-child{
     flex: 1;
 }
 
+.usersActions{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .sectionNameEmail{
     display: flex;
     flex-direction: row;

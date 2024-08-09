@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player/youtube";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -12,6 +13,7 @@ import styles from "./MovieInfo.module.css";
 
 const MovieInfo = (prop) => {
   const { movie } = prop;
+  const { permissions } = useSelector((state) => state.auth);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
@@ -51,30 +53,34 @@ const MovieInfo = (prop) => {
       <div className={styles.movieHeader}>
         <span className={styles.movieName}>{movie.Name}</span>
         <div className={styles.movieBtnAction}>
-          <Button
-            variant="contained"
-            endIcon={<EditIcon />}
-            onClick={editMovieHandler}
-            sx={{
-              width: "120px",
-              backgroundColor: "orange",
-              "&:hover": { backgroundColor: "#e59502" },
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            endIcon={<DeleteIcon />}
-            onClick={openDeleteModalHandler}
-            sx={{
-              width: "120px",
-              backgroundColor: "#f44c4c",
-              "&:hover": { backgroundColor: "red" },
-            }}
-          >
-            Delete
-          </Button>
+          {permissions.movies.includes("Edit") && (
+            <Button
+              variant="contained"
+              endIcon={<EditIcon />}
+              onClick={editMovieHandler}
+              sx={{
+                width: "120px",
+                backgroundColor: "orange",
+                "&:hover": { backgroundColor: "#e59502" },
+              }}
+            >
+              Edit
+            </Button>
+          )}
+          {permissions.movies.includes("Delete") && (
+            <Button
+              variant="contained"
+              endIcon={<DeleteIcon />}
+              onClick={openDeleteModalHandler}
+              sx={{
+                width: "120px",
+                backgroundColor: "#f44c4c",
+                "&:hover": { backgroundColor: "red" },
+              }}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </div>
       <ReactPlayer
@@ -154,7 +160,9 @@ const MovieInfo = (prop) => {
           {movie.Subscribers.length === 0 && (
             <div className={styles.subscriptionsList}>
               <div className={styles.noSubscribers}>
-                <span className={styles.noSubscribersText}>No movie subscriptions</span>
+                <span className={styles.noSubscribersText}>
+                  No movie subscriptions
+                </span>
               </div>
             </div>
           )}

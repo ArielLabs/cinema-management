@@ -22,6 +22,7 @@ import styles from "./MoviesPage.module.css";
 const MoviesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { permissions } = useSelector((state) => state.auth);
   const { page: currentPage, chars: currentChars } = useSelector(
     (state) => state.search
   );
@@ -111,20 +112,22 @@ const MoviesPage = () => {
     <div className={styles.moviesPage} id="movies-page">
       <div className={styles.actionsContainer}>
         <div className={styles.actions}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{
-              textTransform: "none",
-              backgroundColor: "#646cff",
-              "&:hover": {
-                backgroundColor: "#4a54fb",
-              },
-            }}
-            onClick={newMovieHandler}
-          >
-            New Movie
-          </Button>
+          {permissions.movies.includes("Create") && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{
+                textTransform: "none",
+                backgroundColor: "#646cff",
+                "&:hover": {
+                  backgroundColor: "#4a54fb",
+                },
+              }}
+              onClick={newMovieHandler}
+            >
+              New Movie
+            </Button>
+          )}
           <FormControl variant="outlined" size="small">
             <InputLabel sx={{ color: "#646cff" }}>Search</InputLabel>
             <OutlinedInput

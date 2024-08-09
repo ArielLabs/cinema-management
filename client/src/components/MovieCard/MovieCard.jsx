@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
@@ -5,13 +6,14 @@ import styles from "./MovieCard.module.css";
 
 const MovieCard = (prop) => {
   const { movie } = prop;
+  const { permissions } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { $y: year, $M: month, $D: day } = dayjs(movie.Premiered);
 
   const moviePageHandler = () => {
     navigate(`${movie._id}`);
   };
-  
+
   return (
     <div className={styles.movieCard}>
       <div className={styles.movieCardInner}>
@@ -33,7 +35,7 @@ const MovieCard = (prop) => {
               </p>
               <p>
                 <b>Premiered: </b>
-                {`${month+1}/${day}/${year}`}
+                {`${month + 1}/${day}/${year}`}
               </p>
               <p>
                 <b>Age Restriction: </b>
@@ -41,13 +43,15 @@ const MovieCard = (prop) => {
               </p>
             </div>
             <div className={styles.movieBtn}>
-              <Button
-                variant="contained"
-                color="warning"
-                onClick={moviePageHandler}
-              >
-                Movie Page
-              </Button>
+              {permissions.movies.includes("View") && (
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={moviePageHandler}
+                >
+                  Movie Page
+                </Button>
+              )}
             </div>
           </div>
         </div>

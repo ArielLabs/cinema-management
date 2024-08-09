@@ -7,7 +7,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import styles from "./Header.module.css";
 
 const Header = () => {
-  const { fullName, role } = useSelector((state) => state.auth);
+  const { fullName, role, permissions } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,22 +26,26 @@ const Header = () => {
         <span className={styles.titleApp}>Cinema</span>
       </div>
       <div className={styles.navlinks}>
-        {role==="Admin" && <NavLink
-          to={"users"}
-          className={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
-          Users
-        </NavLink>}
-        <NavLink
-          to={"subscriptions"}
-          className={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
-          Subscriptions
-        </NavLink>
+        {role === "Admin" && (
+          <NavLink
+            to={"users"}
+            className={({ isActive }) =>
+              isActive ? styles.activeLink : styles.link
+            }
+          >
+            Users
+          </NavLink>
+        )}
+        {permissions.subscriptions.includes("View") && (
+          <NavLink
+            to={"subscriptions"}
+            className={({ isActive }) =>
+              isActive ? styles.activeLink : styles.link
+            }
+          >
+            Subscriptions
+          </NavLink>
+        )}
         <NavLink
           to={"movies"}
           className={({ isActive }) =>

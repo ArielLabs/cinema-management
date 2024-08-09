@@ -4,26 +4,26 @@ import Checkbox from "@mui/material/Checkbox";
 import styles from "./PermissionsList.module.css";
 
 const PermissionsList = (prop) => {
-  const { groupname, initialValue, onTransferPermissions } = prop;
+  const { groupname, role, initialValue, onTransferPermissions } = prop;
   const [permissionsChecked, setPermissionsChecked] = useState(initialValue);
 
   const viewChangedHandler = (event) => {
     const isChecked = event.target.checked;
     let updatedPermissions = [];
-    if(isChecked){
-        updatedPermissions = [
-            {...permissionsChecked[0], checked: isChecked},
-            {...permissionsChecked[1]},
-            {...permissionsChecked[2]},
-            {...permissionsChecked[3]}
-        ];
-    }else{
-        updatedPermissions = permissionsChecked.map((p) => {
-            return{
-                ...p,
-                checked: false
-            }
-        })
+    if (isChecked) {
+      updatedPermissions = [
+        { ...permissionsChecked[0], checked: isChecked },
+        { ...permissionsChecked[1] },
+        { ...permissionsChecked[2] },
+        { ...permissionsChecked[3] },
+      ];
+    } else {
+      updatedPermissions = permissionsChecked.map((p) => {
+        return {
+          ...p,
+          checked: false,
+        };
+      });
     }
     setPermissionsChecked(updatedPermissions);
     onTransferPermissions(updatedPermissions, groupname);
@@ -103,6 +103,7 @@ const PermissionsList = (prop) => {
           <Checkbox
             name="movies"
             color="default"
+            disabled={role === "Admin"}
             checked={permissionsChecked[0].checked}
             onChange={viewChangedHandler}
             sx={{
@@ -113,7 +114,12 @@ const PermissionsList = (prop) => {
             }}
           />
         }
-        sx={{ color: "#b4b2b2" }}
+        sx={{
+          color: "#b4b2b2",
+          "& .MuiFormControlLabel-label.Mui-disabled": {
+            color: "#b4b2b2",
+          },
+        }}
       />
       <FormControlLabel
         label="Create"
@@ -121,6 +127,7 @@ const PermissionsList = (prop) => {
           <Checkbox
             name="movies"
             color="default"
+            disabled={role === "Admin"}
             checked={permissionsChecked[1].checked}
             onChange={createChangedHandler}
             sx={{
@@ -131,7 +138,12 @@ const PermissionsList = (prop) => {
             }}
           />
         }
-        sx={{ color: "#b4b2b2" }}
+        sx={{
+          color: "#b4b2b2",
+          "& .MuiFormControlLabel-label.Mui-disabled": {
+            color: "#b4b2b2",
+          },
+        }}
       />
       <FormControlLabel
         label="Delete"
@@ -139,6 +151,7 @@ const PermissionsList = (prop) => {
           <Checkbox
             name="movies"
             color="default"
+            disabled={role === "Admin"}
             checked={permissionsChecked[2].checked}
             onChange={deleteChangedHandler}
             sx={{
@@ -149,7 +162,12 @@ const PermissionsList = (prop) => {
             }}
           />
         }
-        sx={{ color: "#b4b2b2" }}
+        sx={{
+          color: "#b4b2b2",
+          "& .MuiFormControlLabel-label.Mui-disabled": {
+            color: "#b4b2b2",
+          },
+        }}
       />
       <FormControlLabel
         label="Edit"
@@ -157,6 +175,7 @@ const PermissionsList = (prop) => {
           <Checkbox
             name="movies"
             color="default"
+            disabled={role === "Admin"}
             checked={permissionsChecked[3].checked}
             onChange={editChangedHandler}
             sx={{
@@ -167,7 +186,12 @@ const PermissionsList = (prop) => {
             }}
           />
         }
-        sx={{ color: "#b4b2b2" }}
+        sx={{
+          color: "#b4b2b2",
+          "& .MuiFormControlLabel-label.Mui-disabled": {
+            color: "#b4b2b2",
+          },
+        }}
       />
     </div>
   );

@@ -69,18 +69,22 @@ const UsersTable = (prop) => {
             {users.message.map((user) => (
               <tr key={user._id} className={styles.userRow}>
                 <td style={{ width: "8%" }}>
-                  <IconButton
-                    sx={{ color: "#fa626e" }}
-                    onClick={() => openDeleteModalHandler(user._id)}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                  <IconButton
-                    sx={{ color: "orange" }}
-                    onClick={() => editUserHandler(user._id)}
-                  >
-                    <EditIcon />
-                  </IconButton>
+                  <div className={styles.usersActions}>
+                    {user.Role === "User" && (
+                      <IconButton
+                        sx={{ color: "#fa626e" }}
+                        onClick={() => openDeleteModalHandler(user._id)}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    )}
+                    <IconButton
+                      sx={{ color: "orange" }}
+                      onClick={() => editUserHandler(user._id)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </div>
                 </td>
                 <td style={{ width: "25%" }}>
                   <div className={styles.sectionNameEmail}>
