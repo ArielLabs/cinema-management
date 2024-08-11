@@ -31,6 +31,7 @@ export const authentication = async (email, password) => {
   return {
     token: token,
     role: userDetails.Role,
+    timeout: Number(userDetails.SessionTimeOut),
     fullName: `${userDetails.FirstName} ${userDetails.LastName}`,
     permissions: userPermissions
   };

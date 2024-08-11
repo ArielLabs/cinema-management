@@ -6,7 +6,7 @@ const router = Router();
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const { token, role, fullName, permissions } = await authentication(
+    const { token, role, timeout, fullName, permissions } = await authentication(
       email,
       password
     );
@@ -15,6 +15,7 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
+      maxAge: timeout * 60 * 1000
     });
 
     res.status(201).json({
