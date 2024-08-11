@@ -8,22 +8,27 @@ const SubscriptionsPage = () => {
   const navigate = useNavigate();
 
   const fetchMembers = async () => {
-    try {
-      const { data } = await axiosInstance.get("members");
-      return data;
-    } catch (err) {
-      const { status } = err.response;
-      if (status === 401 || status === 403) {
-        navigate("/login");
-      }
+    const response = await axiosInstance.get("members");
+
+    if (response.status !== 200) {
+      throw Error("Failed to fetch members");
     }
+
+    return response.data;
   };
 
   const { data, isLoading } = useQuery({
     queryKey: "fetch-members",
     queryFn: fetchMembers,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+    retry: false,
+    onError: (err) => {
+      const { status } = err.response;
+      if (status === 401 || status === 403) {
+        navigate("/login");
+      }
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
   });
 
   return (
