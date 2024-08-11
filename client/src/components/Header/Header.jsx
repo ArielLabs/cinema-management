@@ -1,6 +1,9 @@
+import { useMutation } from "react-query";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../../store/auth";
+import { searchActions } from "../../store/search";
+import { axiosInstance } from "../../utils/http";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -11,9 +14,25 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const logout = async () => {
+    return await axiosInstance.post("auth/logout");
+  };
+
+  const { mutate: exit } = useMutation({
+    mutationKey: "logout",
+    mutationFn: logout,
+    onSuccess: () => {
+      dispatch(authActions.clearAuth());
+      dispatch(searchActions.clearSearch());
+      navigate("/login");
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
   const logoutHandler = () => {
-    dispatch(authActions.clearAuth());
-    navigate("/login");
+    exit();
   };
 
   return (
