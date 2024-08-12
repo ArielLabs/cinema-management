@@ -150,8 +150,17 @@ const MovieInfo = (prop) => {
               {movie.Subscribers.map((sub) => (
                 <div key={sub.id} className={styles.listItem}>
                   <span>
-                    <span className={styles.subsItem}>{sub.name}</span> -{" "}
-                    {dateFormatSubscriber(sub.date)}
+                    <span
+                      className={styles.subsItem}
+                      onClick={() => {
+                        if (permissions.subscriptions.includes("Edit")) {
+                          navigate(`/cinema/subscriptions/${sub.id}`);
+                        }
+                      }}
+                    >
+                      {sub.name}
+                    </span>{" "}
+                    - {dateFormatSubscriber(sub.date)}
                   </span>
                 </div>
               ))}
