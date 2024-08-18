@@ -47,6 +47,10 @@ export const getMovies = async (page, search) => {
     movieModel.aggregate(pipelinePagination),
   ]);
 
+  if (resultMovies.length === 0) {
+    return { numberPages: 0, movies: [] };
+  }
+
   const pages = Math.ceil(resultCount[0].totalMovies / documentsPerPage);
   return { numberPages: pages, movies: resultMovies };
 };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useQuery, useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
+import useDebounce from "../../hooks/use-debounce";
 import { searchActions } from "../../store/search";
 import { axiosInstance } from "../../utils/http";
 import AddIcon from "@mui/icons-material/Add";
@@ -28,30 +29,24 @@ const MoviesPage = () => {
   );
   const [moviesList, setMoviesList] = useState({ totalPages: 0, movies: [] });
   const [textSearch, setTextSearch] = useState(currentChars);
+  const textSearchDebounce = useDebounce(textSearch);
 
   useEffect(() => {
     scrollToTop();
   }, [moviesList]);
 
   const fetchMovies = async (searchDetails) => {
-    try {
-      const { page, chars } = searchDetails;
-      const pageNumber = page ? page : currentPage;
-      const filterByChars = chars ? chars : currentChars;
-      return await axiosInstance.get("movies", {
-        params: { page: pageNumber, search: filterByChars },
-      });
-    } catch (err) {
-      const { status } = err.response;
-      if (status === 401 || status === 403) {
-        navigate("/login");
-      }
-    }
+    const { page } = searchDetails;
+    const pageNumber = page ? page : currentPage;
+    return await axiosInstance.get("movies", {
+      params: { page: pageNumber, search: textSearchDebounce },
+    });
   };
 
   const { isLoading } = useQuery({
-    queryKey: "fetch-movies",
+    queryKey: `fetch-movies-search-term-${textSearchDebounce}`,
     queryFn: fetchMovies,
+    retry: false,
     onSuccess: (res) => {
       const { message } = res.data;
       setMoviesList({
@@ -59,9 +54,15 @@ const MoviesPage = () => {
         movies: message.movies,
       });
     },
+    onError: (err) => {
+      const { status } = err.response;
+      if (status === 401 || status === 403) {
+        navigate("/login");
+      }
+    }
   });
 
-  const { mutate: fetchMoviesByEvent } = useMutation({
+  const { mutate: fetchMoviesByPage } = useMutation({
     mutationFn: fetchMovies,
     onSuccess: (res) => {
       const { message } = res.data;
@@ -70,6 +71,12 @@ const MoviesPage = () => {
         movies: message.movies,
       });
     },
+    onError: (err) => {
+      const { status } = err.response;
+      if (status === 401 || status === 403) {
+        navigate("/login");
+      }
+    }   
   });
 
   const scrollToTop = () => {
@@ -85,7 +92,7 @@ const MoviesPage = () => {
   const paginationChangedHandler = (event, value) => {
     event.stopPropagation();
     dispatch(searchActions.setSearch({ chars: currentChars, page: value }));
-    fetchMoviesByEvent({ page: value });
+    fetchMoviesByPage({ page: value });
   };
 
   const newMovieHandler = () => {
@@ -93,15 +100,8 @@ const MoviesPage = () => {
   };
 
   const searchInputChangedHandler = (event) => {
+    dispatch(searchActions.setSearch({ chars: event.target.value, page: 1 }));
     setTextSearch(event.target.value);
-  };
-
-  const searchInputKeyDownHandler = (event) => {
-    if (event.key === "Enter") {
-      const searchInput = event.target.value;
-      dispatch(searchActions.setSearch({ page: 1, chars: searchInput }));
-      fetchMoviesByEvent({ page: 1, chars: searchInput });
-    }
   };
 
   if (isLoading) {
@@ -135,7 +135,6 @@ const MoviesPage = () => {
               autoComplete="off"
               value={textSearch}
               onChange={searchInputChangedHandler}
-              onKeyDown={searchInputKeyDownHandler}
               sx={{
                 color: "white",
                 "& .MuiOutlinedInput-notchedOutline": {

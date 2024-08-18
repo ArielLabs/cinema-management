@@ -89,7 +89,7 @@ tr:last-child{
 .userAvatar{
     width: 40px;
     height: 40px;
-    background-color: blue;
+    background-color: #3756d3;
     display: flex;
     align-items: center;
     justify-content: center;
