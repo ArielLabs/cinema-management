@@ -1,4 +1,5 @@
 import express, { json } from "express";
+import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { dbConnect } from "./db/mongoConnect.js";
@@ -8,6 +9,8 @@ import { IP_SERVER, PORT_SERVER } from "./environment.js";
 dbConnect();
 
 const app = express();
+
+app.use(helmet());
 
 app.use(cors({
   origin: true,
