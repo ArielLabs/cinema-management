@@ -21,6 +21,6 @@ export const dbConnect = async () => {
       "The data of the members and the movies are in a subscriptions database"
     );
   } catch (err) {
-    console.log("The connection with the subscriptions database failed");
+    console.error("The connection with the subscriptions database failed");
   }
 };

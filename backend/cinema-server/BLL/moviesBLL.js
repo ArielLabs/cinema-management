@@ -1,5 +1,7 @@
-import { SUBSCRIPTIONS_API } from "../environment.js";
+import { getSubscriptionsApi } from "../utils/api.js";
 import axios from "axios";
+
+const SUBSCRIPTIONS_API = getSubscriptionsApi();
 
 export const getMovies = async (page, search) => {
   const response = await axios.get(`${SUBSCRIPTIONS_API}/movies`, {

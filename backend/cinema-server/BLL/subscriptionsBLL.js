@@ -1,5 +1,7 @@
 import axios from "axios";
-import { SUBSCRIPTIONS_API } from "../environment.js";
+import { getSubscriptionsApi } from "../utils/api.js";
+
+const SUBSCRIPTIONS_API = getSubscriptionsApi();
 
 export const getUnsubscribeMovies = async (id) => {
   const response = await axios.get(`${SUBSCRIPTIONS_API}/subscriptions/${id}/unsubscribe`);

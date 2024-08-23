@@ -1,0 +1,40 @@
+version: '3'
+services:
+  mongo-db:
+    image: mongo:latest
+    container_name: mongo-db
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+
+  cinema-server:
+    build: ./backend/cinema-server
+    container_name: cinema-server
+    restart: always
+    env_file:
+      - ./backend/cinema-server/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo-db
+      - subscriptions-server
+
+  subscriptions-server:
+    build: ./backend/subscriptions-server
+    container_name: subscriptions-server
+    restart: always
+    env_file:
+      - ./backend/subscriptions-server/.env
+    depends_on:
+      - mongo-db
+
+  ciname-app:
+    build: ./client
+    container_name: ciname-app
+    ports:
+      - "5173:4173"
+    depends_on:
+      - cinema-server
+
+volumes:
+  mongo-data:
