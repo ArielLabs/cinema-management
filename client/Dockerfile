@@ -1,5 +1,5 @@
 # Use the official Node.js 20 image
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 # Set working directory inside the container
 WORKDIR /app
@@ -14,8 +14,17 @@ COPY . .
 # Build the React app for production
 RUN npm run build
 
-# Expose the port Vite serves on
-EXPOSE 4173
+# Stage-2
+FROM nginx:alpine
 
-# Start the Vite app in production mode
-CMD ["npm", "run", "preview"]
+# Copy the nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy the static file to my Nginx folder to serve static contain
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Open the port to react
+EXPOSE 80
+
+# Run nginx in the foreground
+CMD ["nginx", "-g", "daemon off;"]

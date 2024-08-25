@@ -2,7 +2,6 @@ import express, { json } from "express";
 import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { rateLimit } from "express-rate-limit";
 import { dbConnect } from "./db/mongoConnect.js";
 import { routesInit } from "./routes/config_routes.js";
 import { IP_SERVER, PORT_SERVER } from "./environment.js";
@@ -12,13 +11,6 @@ dbConnect();
 const app = express();
 
 app.use(helmet());
-
-app.use(
-  rateLimit({
-    windowMs: "15 * 60 * 1000",
-    limit: 100,
-  })
-);
 
 app.use(
   cors({

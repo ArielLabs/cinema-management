@@ -32,7 +32,7 @@ services:
     build: ./client
     container_name: ciname-app
     ports:
-      - "5173:4173"
+      - "80:80"
     depends_on:
       - cinema-server
 
