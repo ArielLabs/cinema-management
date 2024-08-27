@@ -15,6 +15,6 @@ export const dbConnect = async () => {
 
     console.log("The data of the administrator are in a usersDB, users.json and permissions.json");
   } catch (err) {
-    console.error("The connection with the subscriptions database failed");
+    console.error("The connection with the users database failed");
   }
 };

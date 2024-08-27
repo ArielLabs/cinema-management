@@ -35,6 +35,9 @@ jobs:
           if [ ! -f ./backend/cinema-server/.env ]; then
             echo "Creating .env file"
             touch ./backend/subscriptions-server/.env
+            echo "IP_SERVER=${{ secrets.IP_SERVER }}" >> ./backend/cinema-server/.env
+            echo "PORT_SERVER=${{ secrets.PORT_SERVER_CINEMA }}" >> ./backend/cinema-server/.env
+            echo "DB_HOST_DEV=${{ secrets.DB_HOST_DEV }}" >> ./backend/cinema-server/.env
             echo "DB_HOST_PROD=${{ secrets.DB_HOST_PROD }}" >> ./backend/cinema-server/.env
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./backend/cinema-server/.env
             echo "DB_NAME=${{ secrets.DB_NAME_CINEMA }}" >> ./backend/cinema-server/.env
@@ -45,6 +48,7 @@ jobs:
             echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> ./backend/cinema-server/.env
             echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> ./backend/cinema-server/.env
             echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> ./backend/cinema-server/.env
+            echo "SUBSCRIPTIONS_API_DEV=${{ secrets.SUBSCRIPTIONS_API_DEV }}" >> ./backend/cinema-server/.env
             echo "SUBSCRIPTIONS_API_PROD=${{ secrets.SUBSCRIPTIONS_API_PROD }}" >> ./backend/cinema-server/.env
           fi
 
@@ -53,6 +57,8 @@ jobs:
           if [ ! -f ./backend/subscriptions-server/.env ]; then
             echo "Creating .env file"
             touch ./backend/subscriptions-server/.env
+            echo "IP_SERVER=${{ secrets.IP_SERVER }}" >> ./backend/subscriptions-server/.env
+            echo "PORT_SERVER=${{ secrets.PORT_SERVER_SUBSCRIPTIONS }}" >> ./backend/subscriptions-server/.env
             echo "DB_HOST_PROD=${{ secrets.DB_HOST_PROD }}" >> ./backend/subscriptions-server/.env
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./backend/subscriptions-server/.env
             echo "DB_NAME=${{ secrets.DB_NAME_SUBSCRIPTIONS }}" >> ./backend/subscriptions-server/.env
