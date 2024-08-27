@@ -30,6 +30,42 @@ jobs:
         run: |
             echo $password | docker login -u $username --password-stdin
 
+      - name: Create .env file for cinema-server
+        run: |
+          if [ ! -f ./backend/cinema-server/.env ]; then
+            echo "Creating .env file"
+            touch ./backend/subscriptions-server/.env
+            echo "DB_HOST_PROD=${{ secrets.DB_HOST_PROD }}" >> ./backend/cinema-server/.env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./backend/cinema-server/.env
+            echo "DB_NAME=${{ secrets.DB_NAME_CINEMA }}" >> ./backend/cinema-server/.env
+            echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> ./backend/cinema-server/.env
+            echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> ./backend/cinema-server/.env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> ./backend/cinema-server/.env
+            echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> ./backend/cinema-server/.env
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> ./backend/cinema-server/.env
+            echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> ./backend/cinema-server/.env
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> ./backend/cinema-server/.env
+            echo "SUBSCRIPTIONS_API_PROD=${{ secrets.SUBSCRIPTIONS_API_PROD }}" >> ./backend/cinema-server/.env
+          fi
+
+      - name: Create .env for subscriptions-server
+        run: |
+          if [ ! -f ./backend/subscriptions-server/.env ]; then
+            echo "Creating .env file"
+            touch ./backend/subscriptions-server/.env
+            echo "DB_HOST_PROD=${{ secrets.DB_HOST_PROD }}" >> ./backend/subscriptions-server/.env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> ./backend/subscriptions-server/.env
+            echo "DB_NAME=${{ secrets.DB_NAME_SUBSCRIPTIONS }}" >> ./backend/subscriptions-server/.env
+          fi
+
+      - name: Create .env for client
+        run: |
+          if [ ! -f ./client/.env ]; then
+            echo "Creating .env file"
+            touch ./client/.env
+            echo "VITE_CINEMA_API_PROD=${{ secrets.VITE_API_PROD }}" >> ./client/.env
+          fi
+
       - name: Build the docker image
         run: |
             ls -la 
