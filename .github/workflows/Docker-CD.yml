@@ -39,4 +39,4 @@ jobs:
 
       - name: push the docker image
         id: push-docker-image
-        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/mern-cinema:latest
+        run: docker push

@@ -10,6 +10,7 @@ services:
       - mongo-data:/data/db
 
   cinema-server:
+    image: arieldocker24/cinema-server:latest
     build: ./backend/cinema-server
     container_name: cinema-server
     restart: always
@@ -24,6 +25,7 @@ services:
       - app-network
 
   subscriptions-server:
+    image: arieldocker24/subscriptions-server:latest
     build: ./backend/subscriptions-server
     container_name: subscriptions-server
     restart: always
@@ -35,6 +37,7 @@ services:
       - app-network
 
   cinema-app:
+    image: arieldocker24/cinema-app:latest
     build: ./client
     container_name: cinema-app
     restart: always
