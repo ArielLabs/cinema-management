@@ -35,8 +35,8 @@ jobs:
         id: build-docker-image
         run: |
             ls -la 
-            docker-compose build
+            docker-compose build -t arieldocker24/mern-cinema:latest
 
       - name: push the docker image
         id: push-docker-image
-        run: docker push
+        run: docker push arieldocker24/mern-cinema:latest
