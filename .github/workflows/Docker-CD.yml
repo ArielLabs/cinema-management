@@ -23,20 +23,26 @@ jobs:
           chmod +x /usr/local/bin/docker-compose
           docker-compose version
       
-      - name: login to docker hub
-        id: docker-hub
+      - name: Login to docker hub
         env:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
         run: |
             echo $password | docker login -u $username --password-stdin
 
-      - name: build the docker image
-        id: build-docker-image
+      - name: Build the docker image
         run: |
             ls -la 
             docker-compose build
 
-      - name: push the docker image
-        id: push-docker-image
-        run: docker push
+      - name: Tag Docker images for Docker Hub
+        run: |
+          docker tag cinema-server ${{secrets.DOCKERHUB_USERNAME}}/cinema-server:latest
+          docker tag subscriptions-server ${{secrets.DOCKERHUB_USERNAME}}/subscriptions-server:latest
+          docker tag cinema-app ${{secrets.DOCKERHUB_USERNAME}}/cinema-app:latest
+
+      - name: Push Docker images to Docker Hub
+        run: |
+          docker push ${{secrets.DOCKERHUB_USERNAME}}/cinema-server:latest
+          docker push ${{secrets.DOCKERHUB_USERNAME}}/subscriptions-server:latest
+          docker push ${{secrets.DOCKERHUB_USERNAME}}/cinema-app:latest
