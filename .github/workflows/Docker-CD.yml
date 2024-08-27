@@ -35,14 +35,6 @@ jobs:
             ls -la 
             docker-compose build
 
-      - name: Tag Docker images for Docker Hub
-        run: |
-          docker tag cinema-server ${{secrets.DOCKERHUB_USERNAME}}/cinema-server:latest
-          docker tag subscriptions-server ${{secrets.DOCKERHUB_USERNAME}}/subscriptions-server:latest
-          docker tag cinema-app ${{secrets.DOCKERHUB_USERNAME}}/cinema-app:latest
-
       - name: Push Docker images to Docker Hub
         run: |
-          docker push ${{secrets.DOCKERHUB_USERNAME}}/cinema-server:latest
-          docker push ${{secrets.DOCKERHUB_USERNAME}}/subscriptions-server:latest
-          docker push ${{secrets.DOCKERHUB_USERNAME}}/cinema-app:latest
+          docker-compose push
