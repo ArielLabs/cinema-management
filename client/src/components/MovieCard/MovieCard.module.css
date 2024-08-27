@@ -67,3 +67,12 @@
     align-items: center;
     width: 100%;
 }
+
+
+@media screen and (min-height: 950px) {
+    .movieCard{
+        width: 275px;
+        height: 375px;
+        margin: 2rem;
+    }
+}

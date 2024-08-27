@@ -48,3 +48,9 @@
     margin: 0 1rem;
     color: #646cff;
 }
+
+@media screen and (min-height: 950px) {
+    .header{
+        height: 7%;
+    }
+}

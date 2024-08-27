@@ -83,12 +83,15 @@ const MovieInfo = (prop) => {
           )}
         </div>
       </div>
+      <div className={styles.videoPlayer}>
       <ReactPlayer
         controls={true}
         url={movie.Trailer}
-        height="500px"
+        className={styles.videoPlayer}
+        height="100%"
         width="100%"
       />
+      </div>
       <div className={styles.movieDetailsContainer}>
         <div
           className={styles.movieImage}

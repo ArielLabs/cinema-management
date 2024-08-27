@@ -35,6 +35,11 @@
     height: 420px;
 }
 
+.videoPlayer{
+    height: 500px;
+    width: 100%;
+}
+
 .moreInfo{
     width: 40%;
 }
@@ -99,9 +104,9 @@
 
 .movieImage{
     width: 30%;
+    height: 95%;
     background-repeat: no-repeat;
     background-size: cover;
-    box-sizing: border-box;
     background-position: center;
 }
 
@@ -146,4 +151,13 @@
     color: white;
     text-align: center;
     font-size: 1.2rem;
+}
+
+@media screen and (min-height: 950px) {
+    .videoPlayer{
+        height: 680px;
+    }
+    .movieDetailsContainer{
+        height: 620px;
+    }
 }
