@@ -22,7 +22,7 @@ const ModalDelete = (prop) => {
         if (itemType === "users") {
           queryClient.invalidateQueries("fetch-users");
         }
-        if (itemType === "members") {
+        if (itemType === "members" || itemType === "movies") {
           queryClient.invalidateQueries("fetch-members");
         }
       });

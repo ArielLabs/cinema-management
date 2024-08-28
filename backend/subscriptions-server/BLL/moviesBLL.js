@@ -1,6 +1,7 @@
 import movieModel from "../models/movieModel.js";
 import subscriptionModel from "../models/subscriptionModel.js";
 import { getMoviesFromFile } from "../DAL/moviesFile.js";
+import screeningModel from "../models/screeningModel.js";
 
 export const insertMovies = async () => {
   const { movies: allMovies } = await getMoviesFromFile();
@@ -95,5 +96,17 @@ export const updateMovie = async (id, movie) => {
 };
 
 export const deleteMovie = async (id) => {
-  return await movieModel.findByIdAndDelete(id);
+  const screeningsOfMovie = await screeningModel.find({ MovieId: id });
+  const screeningIdsOfMovie = screeningsOfMovie.map(
+    (screening) => screening._id
+  );
+
+  await subscriptionModel.updateMany(
+    { Screenings: { $in: screeningIdsOfMovie } },
+    { $pull: { Screenings: { $in: screeningIdsOfMovie } } }
+  );
+  
+  await screeningModel.deleteMany({ MovieId: id });
+  await movieModel.findByIdAndDelete(id);
+  return "Deleted successfully!";
 };
