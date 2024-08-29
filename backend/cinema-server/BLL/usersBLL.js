@@ -2,7 +2,7 @@ import userModel from "../models/userModel.js";
 import { readUsers, writeUsers } from "../DAL/usersFile.js";
 import { readPermissions, writePermissions } from "../DAL/permissionsFile.js";
 import { personalInfo, permissions } from "../constants/admin.js";
-import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../environment.js";
+import { ADMIN_EMAIL, ADMIN_PASSWORD, CLIENT_DEV_PORT,CLIENT_PROD_PORT } from "../environment.js";
 import { sendEmail } from "../services/mail/mail.js";
 import { v4 as uuidv4 } from "uuid";
 import { hash } from "bcrypt";
@@ -164,7 +164,9 @@ export const createUser = async (newUser) => {
   ]);
 
   const fullname = `${FirstName} ${LastName}`;
-  await sendEmail(Email, fullname);
+  const clientPort = process.env.NODE_ENV === 'development' ? CLIENT_DEV_PORT : CLIENT_PROD_PORT;
+  const regiterUrl= `http://localhost:${clientPort}/register`;
+  await sendEmail(Email, fullname, regiterUrl);
 
   return "Saved successfully!";
 };

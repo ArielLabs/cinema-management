@@ -21,3 +21,6 @@ export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 
 export const SUBSCRIPTIONS_API_DEV = process.env.SUBSCRIPTIONS_API_DEV;
 export const SUBSCRIPTIONS_API_PROD = process.env.SUBSCRIPTIONS_API_PROD;
+
+export const CLIENT_DEV_PORT = process.env.CLIENT_DEV_PORT;
+export const CLIENT_PROD_PORT = process.env.CLIENT_PROD_PORT;

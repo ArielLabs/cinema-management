@@ -1,3 +1,4 @@
+import { CronJob } from "cron";
 import movieModel from "../models/movieModel.js";
 import screeningModel from "../models/screeningModel.js";
 
@@ -27,7 +28,7 @@ const screeningDay = (moviesIds, date) => {
         MovieId: movies[randIdx],
         Hall: HALLS[i],
         Hour: HOURS[j],
-        Date: date
+        Date: date,
       });
       movies.splice(randIdx, 1);
     }
@@ -41,7 +42,7 @@ export const insertScreenings = async () => {
   const ids = moviesId.map((movie) => movie._id);
 
   const days = [];
-  for (let n = 0; n < 7; n++) {
+  for (let n = 1; n < 8; n++) {
     const date = getDate(n);
     if (date.getDay() !== 5 && date.getDay() !== 6) {
       const screenings = screeningDay(ids, date);
@@ -50,3 +51,24 @@ export const insertScreenings = async () => {
   }
   await screeningModel.insertMany(days);
 };
+
+const updateScreenings = async () => {
+  const moviesId = await movieModel.find({}, "_id");
+  const ids = moviesId.map((movie) => movie._id);
+
+  const weekOffset = 7;
+  const date = getDate(weekOffset);
+  const screenings = screeningDay(ids, date);
+  await screeningModel.insertMany(screenings);
+};
+
+CronJob.from({
+  cronTime: "0 0 * * 0-4",
+  onTick: function () {
+    updateScreenings().then(() => {
+      console.log("The screening dates have been updated");
+    });
+  },
+  start: true,
+  timeZone: "Asia/Jerusalem",
+});

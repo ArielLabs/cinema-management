@@ -12,13 +12,13 @@ const transport = createTransport({
   },
 });
 
-export const sendEmail = async (recipientEmail ,recipientFullname) => {
+export const sendEmail = async (recipientEmail ,recipientFullname, regiterUrl) => {
   const source = readFileSync('./services/mail/emailTemplate.hbs', "utf-8");
   const template = handlebars.compile(source);
   return await transport.sendMail({
     from: MAIL_USER,
     to: recipientEmail,
     subject: "Welcome to Cinema App",
-    html: template({fullname: recipientFullname})
+    html: template({fullname: recipientFullname, regiterUrl})
   });
 };
