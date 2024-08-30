@@ -13,6 +13,7 @@ export const getUnsubscribeMovies = async (id) => {
   const unsubscribeMovies = await screeningModel
     .find({
       MovieId: { $nin: subscriptionMoviesIds },
+      Date: { $gte: new Date() }
     })
     .populate({ path: "MovieId", select: "Name" });
 
