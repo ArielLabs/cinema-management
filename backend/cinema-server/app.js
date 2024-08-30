@@ -1,5 +1,6 @@
 import express, { json } from "express";
 import helmet from "helmet";
+import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { dbConnect } from "./db/mongoConnect.js";
@@ -22,6 +23,8 @@ app.use(
 app.use(cookieParser());
 
 app.use(json());
+
+app.use(morgan('common'));
 
 routesInit(app);
 
