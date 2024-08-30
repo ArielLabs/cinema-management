@@ -91,6 +91,11 @@ export const getMembers = async () => {
         },
       },
     },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
   ]);
 };
 
