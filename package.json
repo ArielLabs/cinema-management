@@ -1,0 +1,17 @@
+{
+  "name": "cinema-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "concurrently --names \"root,subscriptions,cinema,client\" --prefix-colors \"green,cyan,yellow,magenta\" \"npm install\" \"npm --prefix backend/subscriptions-server install\" \"npm --prefix backend/cinema-server install\" \"npm --prefix client install\"",
+    "start-all": "concurrently --names \"subscriptions,cinema,client\" --prefix-colors \"cyan,yellow,magenta\" \"npm --prefix backend/subscriptions-server run start-dev\" \"npm --prefix backend/cinema-server run start-dev\" \"npm --prefix client run dev\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
