@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom";
 import RootLayout from "./pages/RootLayout/RootLayout";
 import CinemaLayout from "./pages/CinemaLayout/CinemaLayout";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -20,7 +20,8 @@ const routerApp = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
-      { index: true, path: "login", element: <LoginPage /> },
+      { index: true, element: <Navigate to="login" replace /> },
+      { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
     ],
   },
@@ -28,7 +29,8 @@ const routerApp = createBrowserRouter([
     path: "/cinema",
     element: <CinemaLayout />,
     children: [
-      { index: true, path: "movies", element: <MoviesPage /> },
+      { index: true, element: <Navigate to="movies" replace /> },
+      { path: "movies", element: <MoviesPage /> },
       { path: "movies/new", element: <NewMoviePage /> },
       { path: "movies/:id", element: <MoviePage />, loader: fetchMovie },
       { path: "movies/:id/edit", element: <EditMoviePage />, loader: fetchMovie },
